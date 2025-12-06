@@ -20,8 +20,10 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.text.style.TextDirection.Companion.Content
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import com.example.sgmautotreckerapp.screens.Content
 import com.example.sgmautotreckerapp.screens.Registration
 import com.example.sgmautotreckerapp.screens.login
 import com.example.sgmautotreckerapp.ui.theme.SGMAutoTreckerAppTheme
@@ -32,7 +34,7 @@ class MainActivity : ComponentActivity() {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
         setContent {
-            login()
+
         }
     }
 }

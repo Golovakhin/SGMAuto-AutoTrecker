@@ -20,3 +20,9 @@ val backgroundAdvanceLight = Color(0xFFC7BDAF)
 val advanceLight = Color(0xFF95A792)
 val textformLight = Color(0xFFF7EDDD)
 
+object circleColor {
+    val firstColor = Color(0xFFD4B483)
+    val secondColor = Color(0xFF7A9B76)
+    val thirdColor = Color(0xFF6A8A9C)
+    val  fourthColor = Color(0xFFC17C74)
+}
