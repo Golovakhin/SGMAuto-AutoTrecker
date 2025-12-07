@@ -18,6 +18,7 @@ import androidx.compose.ui.graphics.StrokeCap
 import androidx.compose.ui.unit.dp
 import com.example.sgmautotreckerapp.ui.theme.advanceLight
 import com.example.sgmautotreckerapp.ui.theme.backgroundLight
+import com.example.sgmautotreckerapp.ui.theme.fontLight
 import com.example.sgmautotreckerapp.ui.theme.mainLight
 
 @Composable
@@ -63,7 +64,7 @@ public fun Navigation(){
                     )
 
                     drawCircle(
-                        color = mainLight,
+                        color = fontLight,
                         radius = 50.dp.toPx(),
                         center = Offset(x= size.width/2,y=0f)
                     )

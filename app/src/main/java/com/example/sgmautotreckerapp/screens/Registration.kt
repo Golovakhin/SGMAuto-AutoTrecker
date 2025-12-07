@@ -69,6 +69,7 @@ public fun Registration(){
 
             Column() {
                 Spacer(Modifier.fillMaxWidth(1f).weight(1f))
+
                 Row(Modifier.fillMaxWidth().weight(1f).clip(shape = RoundedCornerShape(10.dp))) {
 
                     OutlinedTextField(
