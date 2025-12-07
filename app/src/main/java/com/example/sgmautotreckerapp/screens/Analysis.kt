@@ -26,7 +26,10 @@ import androidx.compose.ui.graphics.StrokeCap
 import androidx.compose.ui.graphics.drawscope.Stroke
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.navigation.Navigation
 import com.example.sgmautotreckerapp.Segment
+import com.example.sgmautotreckerapp.commonfunction.Background
+import com.example.sgmautotreckerapp.commonfunction.Navigation
 import com.example.sgmautotreckerapp.ui.theme.advanceLight
 import com.example.sgmautotreckerapp.ui.theme.backgroundAdvanceLight
 import com.example.sgmautotreckerapp.ui.theme.backgroundLight
@@ -62,92 +65,7 @@ fun AnalysisRing() {
 }
 
 
-@Composable
-fun Navigation(){
-    Column(Modifier
-        .fillMaxWidth().fillMaxHeight()
-    ){
-        Row(Modifier.fillMaxWidth().fillMaxHeight(0.5f),
-            horizontalArrangement = Arrangement.Center,
-            verticalAlignment = Alignment.Bottom){
-            Box(Modifier
-                .fillMaxWidth(1.55f/5.55f)
-                .fillMaxHeight(0.5f)
-                .align(Alignment.Bottom),
-                contentAlignment = Alignment.BottomCenter){
-                Canvas(Modifier.fillMaxSize())  {}
 
-            }
-        }
-        Row(Modifier.background(color = advanceLight).fillMaxWidth().fillMaxHeight(),
-            verticalAlignment = Alignment.Top){
-
-            Box(Modifier.weight(1f).fillMaxHeight(),
-                contentAlignment = Alignment.Center){
-                Text("GG")
-            }
-
-            Box(Modifier.weight(1f).fillMaxHeight(),
-                contentAlignment = Alignment.Center){
-                Text("GG")
-            }
-
-            Box(Modifier
-                .fillMaxHeight(0.5f)
-                .weight(1.55f),
-                contentAlignment = Alignment.TopCenter){
-                Canvas(Modifier.fillMaxSize())
-                {
-                    drawCircle(
-                        color = backgroundLight,
-                        radius = 60.dp.toPx(),
-                        center = Offset(x= size.width/2,y=0f)
-                    )
-
-                    drawCircle(
-                        color = mainLight,
-                        radius = 50.dp.toPx(),
-                        center = Offset(x= size.width/2,y=0f)
-                    )
-
-                    drawLine(
-                        color = backgroundLight,
-                        start = Offset(x = size.width/3,y = 0f),
-                        end = Offset(x = size.width - size.width/3,y = 0f),
-                        strokeWidth = 20f,
-                        cap = StrokeCap.Round
-
-                    )
-                    drawLine(
-                        color = backgroundLight,
-                        start = Offset(x = size.width/2,y = -size.height/3),
-                        end = Offset(x = size.width/2,y = size.height/3),
-                        strokeWidth = 20f,
-                        cap = StrokeCap.Round
-                    )
-                }
-            }
-
-            Box(Modifier.weight(1f).fillMaxHeight(),
-                contentAlignment = Alignment.Center){
-                Text("GG")
-            }
-
-            Box(Modifier.weight(1f).fillMaxHeight(),
-                contentAlignment = Alignment.Center){
-                Text("GG")
-            }
-        }
-    }
-}
-
-
-@Composable
-private fun Background(){
-    Row(modifier = Modifier.background(backgroundLight).fillMaxSize()) {
-
-    }
-}
 
 @Composable
 private fun Legend(){
@@ -210,11 +128,11 @@ private fun Info(){
 
 @Composable
 public fun Content(){
+    Background()
     Column() {
         Info()
         AnalysisRing()
         Legend()
         Navigation()
-        Background()
     }
 }
