@@ -26,7 +26,6 @@ import androidx.compose.ui.graphics.StrokeCap
 import androidx.compose.ui.graphics.drawscope.Stroke
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import androidx.navigation.Navigation
 import com.example.sgmautotreckerapp.Segment
 import com.example.sgmautotreckerapp.commonfunction.Background
 import com.example.sgmautotreckerapp.commonfunction.Navigation
