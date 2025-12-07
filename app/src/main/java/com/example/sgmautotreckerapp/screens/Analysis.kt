@@ -38,7 +38,7 @@ import com.example.sgmautotreckerapp.ui.theme.fontLight
 import com.example.sgmautotreckerapp.ui.theme.mainLight
 
 @Composable
-fun AnalysisRing() {
+private fun AnalysisRing() {
     val segments = listOf(
         Segment(circleColor.firstColor, 90f),
         Segment(circleColor.secondColor,90f),
