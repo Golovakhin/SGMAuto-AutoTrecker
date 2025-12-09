@@ -1,7 +1,9 @@
 package com.example.sgmautotreckerapp.commonfunction
 
+import android.icu.number.Scale
 import androidx.compose.foundation.Canvas
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -9,12 +11,23 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.offset
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.shape.CircleShape
+import androidx.compose.material3.BottomAppBar
+import androidx.compose.material3.FabPosition
+import androidx.compose.material3.FloatingActionButton
+import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.geometry.Offset
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.StrokeCap
+import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.unit.dp
 import com.example.sgmautotreckerapp.ui.theme.advanceLight
 import com.example.sgmautotreckerapp.ui.theme.backgroundLight
@@ -23,34 +36,35 @@ import com.example.sgmautotreckerapp.ui.theme.mainLight
 
 @Composable
 public fun Navigation(){
-    Column(Modifier
-        .fillMaxWidth().fillMaxHeight()
-    ){
-        Row(Modifier.fillMaxWidth().fillMaxHeight(0.5f),
-            horizontalArrangement = Arrangement.Center,
-            verticalAlignment = Alignment.Bottom){
-            Box(Modifier
-                .fillMaxWidth(1.55f/5.55f)
-                .fillMaxHeight(0.5f)
-                .align(Alignment.Bottom),
-                contentAlignment = Alignment.BottomCenter){
-                Canvas(Modifier.fillMaxSize())  {}
+    Column(Modifier.fillMaxSize(), verticalArrangement = Arrangement.Bottom) {
+        Box(Modifier.height(75.dp), contentAlignment = Alignment.BottomCenter){
+            Column(Modifier
+                .fillMaxWidth().fillMaxHeight(0.4f)
+            ){
+                Row(Modifier.fillMaxWidth().fillMaxHeight(0.5f),
+                    horizontalArrangement = Arrangement.Center,
+                    verticalAlignment = Alignment.Bottom){
+                    Box(Modifier
+                        .fillMaxWidth(1.55f/5.55f)
+                        .fillMaxHeight(0.5f)
+                        .align(Alignment.Bottom),
+                        contentAlignment = Alignment.BottomCenter){
+                        Canvas(Modifier.fillMaxSize())  {}
 
+                    }
+                }
             }
         }
-        Row(Modifier.background(color = advanceLight).fillMaxWidth().fillMaxHeight(),
+        Row(Modifier.background(color = advanceLight).fillMaxWidth().height(100.dp),
             verticalAlignment = Alignment.Top){
-
             Box(Modifier.weight(1f).fillMaxHeight(),
                 contentAlignment = Alignment.Center){
                 Text("GG")
             }
-
             Box(Modifier.weight(1f).fillMaxHeight(),
                 contentAlignment = Alignment.Center){
                 Text("GG")
             }
-
             Box(Modifier
                 .fillMaxHeight(0.5f)
                 .weight(1.55f),
@@ -62,13 +76,11 @@ public fun Navigation(){
                         radius = 60.dp.toPx(),
                         center = Offset(x= size.width/2,y=0f)
                     )
-
                     drawCircle(
                         color = fontLight,
                         radius = 50.dp.toPx(),
                         center = Offset(x= size.width/2,y=0f)
                     )
-
                     drawLine(
                         color = backgroundLight,
                         start = Offset(x = size.width/3,y = 0f),
@@ -86,12 +98,10 @@ public fun Navigation(){
                     )
                 }
             }
-
             Box(Modifier.weight(1f).fillMaxHeight(),
                 contentAlignment = Alignment.Center){
                 Text("GG")
             }
-
             Box(Modifier.weight(1f).fillMaxHeight(),
                 contentAlignment = Alignment.Center){
                 Text("GG")
@@ -99,5 +109,3 @@ public fun Navigation(){
         }
     }
 }
-
-
