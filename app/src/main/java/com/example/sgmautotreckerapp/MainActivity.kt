@@ -23,6 +23,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.style.TextDirection.Companion.Content
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import com.example.sgmautotreckerapp.screens.CategoryScreen
 import com.example.sgmautotreckerapp.screens.Content
 import com.example.sgmautotreckerapp.screens.Profile
 import com.example.sgmautotreckerapp.screens.Registration
