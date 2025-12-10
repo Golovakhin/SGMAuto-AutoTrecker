@@ -48,6 +48,12 @@ import com.example.sgmautotreckerapp.ui.theme.backgroundLight
 import com.example.sgmautotreckerapp.ui.theme.mainLight
 import org.w3c.dom.Text
 
+
+public val composableList: List<@Composable () -> Unit> = listOf(
+    {Header()},
+    {GarageCar("Honda Civic", "Type R", "XI", 2025, "Р805ХР33", "22") },
+    {NewCar()}
+)
 @Composable
 public fun Garage(){
     Background()
@@ -55,7 +61,7 @@ public fun Garage(){
         Header()
         GarageCar("Honda Civic", "Type R", "XI", 2025, "Р805ХР33", "22")
         NewCar()
-        Navigation()
+
 
     }
 
