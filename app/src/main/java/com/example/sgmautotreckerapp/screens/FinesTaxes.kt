@@ -35,28 +35,35 @@ import com.example.sgmautotreckerapp.ui.theme.fontLight
 import com.example.sgmautotreckerapp.ui.theme.mainLight
 import com.example.sgmautotreckerapp.ui.theme.textformLight
 
-@Composable
-private fun CarWashBlocks(){
-    Spacer(Modifier.fillMaxWidth().height(30.dp))
-    Row(Modifier.fillMaxWidth().fillMaxHeight(0.05f)) {
-        Column(Modifier.fillMaxWidth(0.1f).fillMaxHeight(), horizontalAlignment = Alignment.CenterHorizontally, verticalArrangement = Arrangement.Center) {
-            Text(text = "gg", fontSize = 16.sp)
-        }
-        Spacer(Modifier.fillMaxWidth(0.25f).height(30.dp))
 
-        Column(Modifier.fillMaxWidth().fillMaxHeight(), verticalArrangement = Arrangement.Center, horizontalAlignment = Alignment.Start) {
-            Text(text = "Мойка", fontSize = 40.sp, fontWeight = FontWeight.Bold, color = fontLight)
+@Composable
+private fun FinesTaxesText(){
+
+    Spacer(Modifier.fillMaxWidth().height(30.dp))
+    Row(Modifier.fillMaxWidth().height(60.dp)) {
+        Column(Modifier.fillMaxWidth(0.1f).fillMaxHeight(), horizontalAlignment = Alignment.CenterHorizontally) {
+            Text(text = "gg", fontSize = 30.sp)
+        }
+
+        //Spacer(Modifier.width(10.dp))
+
+        Column(Modifier.fillMaxWidth(0.9f).fillMaxHeight()) {
+            Box(Modifier.align(Alignment.CenterHorizontally)){
+                Text(text = "Штрафы и налоги", fontSize = 30.sp, fontWeight = FontWeight.Bold, color = fontLight)
+            }
+
         }
     }
 }
 
+
 @Composable
-private fun ContentCarWash(){
+private fun FinesTaxesForms(){
     Row(Modifier.fillMaxSize(), horizontalArrangement = Arrangement.Center) {
         Column(Modifier.fillMaxWidth(0.9f).fillMaxHeight()) {
 
-            val dateCarwash = remember { mutableStateOf("") }
-            val sumCarWash = remember { mutableStateOf("") }
+            val dateFinesTaxes = remember { mutableStateOf("") }
+            val sumFinesTaxes = remember { mutableStateOf("") }
 
             //Дата траты
             Row(Modifier.padding(top = 10.dp)) {
@@ -69,9 +76,9 @@ private fun ContentCarWash(){
             }
             Row(Modifier.padding(start = 15.dp, top = 5.dp).clip(RoundedCornerShape(10.dp))) {
                 OutlinedTextField(
-                    value = dateCarwash.value,
+                    value = dateFinesTaxes.value,
                     textStyle = TextStyle(fontSize = 20.sp),
-                    onValueChange = { newText -> dateCarwash.value = newText },
+                    onValueChange = { newText -> dateFinesTaxes.value = newText },
                     singleLine = true,
                     placeholder = {
                         Text(
@@ -105,9 +112,9 @@ private fun ContentCarWash(){
             }
             Row(Modifier.padding(start = 15.dp, top = 5.dp).clip(RoundedCornerShape(10.dp))) {
                 OutlinedTextField(
-                    value = sumCarWash.value,
+                    value = sumFinesTaxes.value,
                     textStyle = TextStyle(fontSize = 20.sp),
-                    onValueChange = { newText -> sumCarWash.value = newText },
+                    onValueChange = { newText -> sumFinesTaxes.value = newText },
                     singleLine = true,
                     placeholder = {
                         Text(
@@ -127,6 +134,18 @@ private fun ContentCarWash(){
 
 
                 )
+            }
+            Spacer(Modifier.fillMaxWidth().height(30.dp))
+            Column(verticalArrangement = Arrangement.Center, horizontalAlignment = Alignment.CenterHorizontally) {
+                Row() {
+                    Column(Modifier.fillMaxWidth(0.25f), horizontalAlignment = Alignment.End) {
+                        Text(text = "gg", fontSize = 15.sp)
+                    }
+
+                    Column(Modifier.fillMaxWidth(), horizontalAlignment = Alignment.Start, verticalArrangement = Arrangement.Center) {
+                        Text(text = "Загрузить фото, документ, чек", fontSize = 15.sp)
+                    }
+                }
             }
 
             Spacer(Modifier.fillMaxWidth().fillMaxHeight(0.4f))
@@ -148,11 +167,12 @@ private fun ContentCarWash(){
 
 
 @Composable
-public fun CarWashScreen(){
+public fun FinesTaxesScreen(){
     Background()
     Column {
         CommonHeader(advanceLight, fontLight, "Expanses")
-        CarWashBlocks()
-        ContentCarWash()
+        FinesTaxesText()
+        FinesTaxesForms()
+
     }
 }
