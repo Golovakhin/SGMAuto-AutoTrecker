@@ -12,6 +12,7 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
@@ -23,6 +24,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontStyle
 import androidx.compose.ui.text.font.FontWeight
@@ -35,28 +37,39 @@ import com.example.sgmautotreckerapp.ui.theme.fontLight
 import com.example.sgmautotreckerapp.ui.theme.mainLight
 import com.example.sgmautotreckerapp.ui.theme.textformLight
 
+
+
+
+
 @Composable
-private fun CarWashBlocks(){
+private fun ParkingRoadBlocks(){
     Spacer(Modifier.fillMaxWidth().height(30.dp))
-    Row(Modifier.fillMaxWidth().fillMaxHeight(0.05f)) {
-        Column(Modifier.fillMaxWidth(0.1f).fillMaxHeight(), horizontalAlignment = Alignment.CenterHorizontally, verticalArrangement = Arrangement.Center) {
+    Row(Modifier.fillMaxWidth().fillMaxHeight(0.1f)) {
+        Column(Modifier.fillMaxWidth(0.1f).fillMaxHeight(), horizontalAlignment = Alignment.CenterHorizontally, verticalArrangement = Arrangement.Top) {
             Text(text = "gg", fontSize = 16.sp)
         }
-        Spacer(Modifier.fillMaxWidth(0.25f).height(30.dp))
 
-        Column(Modifier.fillMaxWidth().fillMaxHeight(), verticalArrangement = Arrangement.Center, horizontalAlignment = Alignment.Start) {
-            Text(text = "Мойка", fontSize = 40.sp, fontWeight = FontWeight.Bold, color = fontLight)
+        //Spacer(Modifier.width(10.dp))
+
+        Column(Modifier.fillMaxWidth(0.9f).fillMaxHeight(), verticalArrangement = Arrangement.Top) {
+            Box(Modifier.align(Alignment.CenterHorizontally)){
+                Text(text = "Парковки и платные", fontSize = 30.sp, fontWeight = FontWeight.Bold, color = fontLight)
+            }
+            Box(Modifier.align(Alignment.CenterHorizontally)){
+                Text(text = "дороги", fontSize = 30.sp, fontWeight = FontWeight.Bold, color = fontLight)
+            }
+
         }
     }
 }
 
 @Composable
-private fun ContentCarWash(){
+private fun ContentParkingRoad(){
     Row(Modifier.fillMaxSize(), horizontalArrangement = Arrangement.Center) {
         Column(Modifier.fillMaxWidth(0.9f).fillMaxHeight()) {
 
-            val dateCarwah = remember { mutableStateOf("") }
-            val sumCarWash = remember { mutableStateOf("") }
+            val dateParkingRoad = remember { mutableStateOf("") }
+            val sumParkingRoad = remember { mutableStateOf("") }
 
             //Дата траты
             Row(Modifier.padding(top = 10.dp)) {
@@ -69,9 +82,9 @@ private fun ContentCarWash(){
             }
             Row(Modifier.padding(start = 15.dp, top = 5.dp).clip(RoundedCornerShape(10.dp))) {
                 OutlinedTextField(
-                    value = dateCarwah.value,
+                    value = dateParkingRoad.value,
                     textStyle = TextStyle(fontSize = 20.sp),
-                    onValueChange = { newText -> dateCarwah.value = newText },
+                    onValueChange = { newText -> dateParkingRoad.value = newText },
                     singleLine = true,
                     placeholder = {
                         Text(
@@ -105,9 +118,9 @@ private fun ContentCarWash(){
             }
             Row(Modifier.padding(start = 15.dp, top = 5.dp).clip(RoundedCornerShape(10.dp))) {
                 OutlinedTextField(
-                    value = sumCarWash.value,
+                    value = sumParkingRoad.value,
                     textStyle = TextStyle(fontSize = 20.sp),
-                    onValueChange = { newText -> sumCarWash.value = newText },
+                    onValueChange = { newText -> sumParkingRoad.value = newText },
                     singleLine = true,
                     placeholder = {
                         Text(
@@ -148,11 +161,11 @@ private fun ContentCarWash(){
 
 
 @Composable
-public fun CarWashScreen(){
+public fun ParkingRoadScreen(){
     Background()
     Column {
         CommonHeader(advanceLight, fontLight, "Expanses")
-        CarWashBlocks()
-        ContentCarWash()
+        ParkingRoadBlocks()
+        ContentParkingRoad()
     }
 }
