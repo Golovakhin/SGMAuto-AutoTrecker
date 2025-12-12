@@ -4,7 +4,7 @@ import androidx.room.Entity
 import androidx.room.PrimaryKey
 import java.time.Year
 
-@Entity(tableName = "users")
+@Entity(tableName = "cars")
 data class Car(
     @PrimaryKey(autoGenerate = true)
     val id: Int? = null,

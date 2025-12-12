@@ -7,7 +7,7 @@ import androidx.room.PrimaryKey
 import java.util.Date
 
 @Entity(
-    tableName = "expanses",
+    tableName = "expenses",
     foreignKeys = [
         ForeignKey(
             entity = User::class,
