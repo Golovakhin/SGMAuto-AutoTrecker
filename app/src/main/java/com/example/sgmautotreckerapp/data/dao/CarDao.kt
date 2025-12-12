@@ -25,4 +25,7 @@ interface CarDao{
 
     @Query("SELECT * FROM cars WHERE id = :carId")
     suspend fun getCarById(carId: Int): Car?
+
+    @Query("SELECT COUNT(*) FROM cars")
+    suspend fun getCarsCount(): Int
 }
