@@ -1,4 +1,4 @@
-package com.example.sgmautotreckerapp.screens
+package com.example.sgmautotreckerapp.screens.CategoryScreens
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
@@ -12,7 +12,6 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
@@ -24,7 +23,6 @@ import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontStyle
 import androidx.compose.ui.text.font.FontWeight
@@ -38,38 +36,34 @@ import com.example.sgmautotreckerapp.ui.theme.mainLight
 import com.example.sgmautotreckerapp.ui.theme.textformLight
 
 
-
-
-
 @Composable
-private fun ParkingRoadBlocks(){
+private fun FinesTaxesText(){
+
     Spacer(Modifier.fillMaxWidth().height(30.dp))
-    Row(Modifier.fillMaxWidth().fillMaxHeight(0.1f)) {
-        Column(Modifier.fillMaxWidth(0.1f).fillMaxHeight(), horizontalAlignment = Alignment.CenterHorizontally, verticalArrangement = Arrangement.Top) {
-            Text(text = "gg", fontSize = 16.sp)
+    Row(Modifier.fillMaxWidth().height(60.dp)) {
+        Column(Modifier.fillMaxWidth(0.1f).fillMaxHeight(), horizontalAlignment = Alignment.CenterHorizontally) {
+            Text(text = "gg", fontSize = 30.sp)
         }
 
         //Spacer(Modifier.width(10.dp))
 
-        Column(Modifier.fillMaxWidth(0.9f).fillMaxHeight(), verticalArrangement = Arrangement.Top) {
+        Column(Modifier.fillMaxWidth(0.9f).fillMaxHeight()) {
             Box(Modifier.align(Alignment.CenterHorizontally)){
-                Text(text = "Парковки и платные", fontSize = 30.sp, fontWeight = FontWeight.Bold, color = fontLight)
-            }
-            Box(Modifier.align(Alignment.CenterHorizontally)){
-                Text(text = "дороги", fontSize = 30.sp, fontWeight = FontWeight.Bold, color = fontLight)
+                Text(text = "Штрафы и налоги", fontSize = 30.sp, fontWeight = FontWeight.Bold, color = fontLight)
             }
 
         }
     }
 }
 
+
 @Composable
-private fun ContentParkingRoad(){
+private fun FinesTaxesForms(){
     Row(Modifier.fillMaxSize(), horizontalArrangement = Arrangement.Center) {
         Column(Modifier.fillMaxWidth(0.9f).fillMaxHeight()) {
 
-            val dateParkingRoad = remember { mutableStateOf("") }
-            val sumParkingRoad = remember { mutableStateOf("") }
+            val dateFinesTaxes = remember { mutableStateOf("") }
+            val sumFinesTaxes = remember { mutableStateOf("") }
 
             //Дата траты
             Row(Modifier.padding(top = 10.dp)) {
@@ -82,9 +76,9 @@ private fun ContentParkingRoad(){
             }
             Row(Modifier.padding(start = 15.dp, top = 5.dp).clip(RoundedCornerShape(10.dp))) {
                 OutlinedTextField(
-                    value = dateParkingRoad.value,
+                    value = dateFinesTaxes.value,
                     textStyle = TextStyle(fontSize = 20.sp),
-                    onValueChange = { newText -> dateParkingRoad.value = newText },
+                    onValueChange = { newText -> dateFinesTaxes.value = newText },
                     singleLine = true,
                     placeholder = {
                         Text(
@@ -118,9 +112,9 @@ private fun ContentParkingRoad(){
             }
             Row(Modifier.padding(start = 15.dp, top = 5.dp).clip(RoundedCornerShape(10.dp))) {
                 OutlinedTextField(
-                    value = sumParkingRoad.value,
+                    value = sumFinesTaxes.value,
                     textStyle = TextStyle(fontSize = 20.sp),
-                    onValueChange = { newText -> sumParkingRoad.value = newText },
+                    onValueChange = { newText -> sumFinesTaxes.value = newText },
                     singleLine = true,
                     placeholder = {
                         Text(
@@ -140,6 +134,18 @@ private fun ContentParkingRoad(){
 
 
                 )
+            }
+            Spacer(Modifier.fillMaxWidth().height(30.dp))
+            Column(verticalArrangement = Arrangement.Center, horizontalAlignment = Alignment.CenterHorizontally) {
+                Row() {
+                    Column(Modifier.fillMaxWidth(0.25f), horizontalAlignment = Alignment.End) {
+                        Text(text = "gg", fontSize = 15.sp)
+                    }
+
+                    Column(Modifier.fillMaxWidth(), horizontalAlignment = Alignment.Start, verticalArrangement = Arrangement.Center) {
+                        Text(text = "Загрузить фото, документ, чек", fontSize = 15.sp)
+                    }
+                }
             }
 
             Spacer(Modifier.fillMaxWidth().fillMaxHeight(0.4f))
@@ -161,11 +167,12 @@ private fun ContentParkingRoad(){
 
 
 @Composable
-public fun ParkingRoadScreen(){
+public fun FinesTaxesScreen(){
     Background()
     Column {
         CommonHeader(advanceLight, fontLight, "Expanses")
-        ParkingRoadBlocks()
-        ContentParkingRoad()
+        FinesTaxesText()
+        FinesTaxesForms()
+
     }
 }

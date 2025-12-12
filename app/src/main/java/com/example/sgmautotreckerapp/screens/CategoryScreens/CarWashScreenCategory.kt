@@ -1,4 +1,4 @@
-package com.example.sgmautotreckerapp.screens
+package com.example.sgmautotreckerapp.screens.CategoryScreens
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border

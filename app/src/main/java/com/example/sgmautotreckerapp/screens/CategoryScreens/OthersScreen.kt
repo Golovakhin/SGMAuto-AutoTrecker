@@ -1,4 +1,4 @@
-package com.example.sgmautotreckerapp.screens
+package com.example.sgmautotreckerapp.screens.CategoryScreens
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
@@ -23,13 +23,9 @@ import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
-import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.text.Placeholder
-import androidx.compose.ui.text.PlaceholderVerticalAlign
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontStyle
 import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.sgmautotreckerapp.commonfunction.Background
@@ -39,100 +35,117 @@ import com.example.sgmautotreckerapp.ui.theme.fontLight
 import com.example.sgmautotreckerapp.ui.theme.mainLight
 import com.example.sgmautotreckerapp.ui.theme.textformLight
 
+
 @Composable
-
-private fun ServiceText(){
+private fun OthersText(){
     Spacer(Modifier.fillMaxWidth().height(30.dp))
-    Row(Modifier.fillMaxWidth().fillMaxHeight(0.05f)) {
-        Column(Modifier.fillMaxWidth(0.1f).fillMaxHeight(), horizontalAlignment = Alignment.CenterHorizontally, verticalArrangement = Arrangement.Center) {
-            Text(text = "gg", fontSize = 16.sp)
+    Row(Modifier.fillMaxWidth().height(60.dp)) {
+        Column(Modifier.fillMaxWidth(0.1f).fillMaxHeight(), horizontalAlignment = Alignment.CenterHorizontally) {
+            Text(text = "gg", fontSize = 30.sp)
         }
-        Spacer(Modifier.fillMaxWidth(0.25f).height(30.dp))
 
-        Column(Modifier.fillMaxWidth().fillMaxHeight(), verticalArrangement = Arrangement.Center, horizontalAlignment = Alignment.Start) {
-            Text(text = "Ремонт", fontSize = 40.sp, fontWeight = FontWeight.Bold, color = fontLight)
+        //Spacer(Modifier.width(10.dp))
+
+        Column(Modifier.fillMaxWidth(0.9f).fillMaxHeight()) {
+            Box(Modifier.align(Alignment.CenterHorizontally)){
+                Text(text = "Прочее", fontSize = 30.sp, fontWeight = FontWeight.Bold, color = fontLight)
+            }
+
         }
     }
 }
 
 
-
 @Composable
-private fun ContentService(){
+private fun OthersForms() {
     Row(Modifier.fillMaxSize(), horizontalArrangement = Arrangement.Center) {
         Column(Modifier.fillMaxWidth(0.9f).fillMaxHeight()) {
 
-            val dateService = remember{mutableStateOf("")}
-            val sumService = remember{mutableStateOf("")}
-            val distService = remember{mutableStateOf("")}
-            val commentService = remember{mutableStateOf("")}
+            val dateAnother = remember { mutableStateOf("") }
+            val sumAnother = remember { mutableStateOf("") }
+            val commentAnother = remember { mutableStateOf("") }
+
 
             //Дата траты
             Row(Modifier.padding(top = 10.dp)) {
-                Text(text = "Выберите дату", fontSize = 20.sp, color = fontLight, fontWeight = FontWeight.SemiBold)
+                Text(
+                    text = "Выберите дату",
+                    fontSize = 26.sp,
+                    color = fontLight,
+                    fontWeight = FontWeight.SemiBold
+                )
             }
-            Row(Modifier.padding(start =15.dp, top = 5.dp ).clip(RoundedCornerShape(10.dp))) {
+            Row(Modifier.padding(start = 15.dp, top = 5.dp).clip(RoundedCornerShape(10.dp))) {
                 OutlinedTextField(
-                    value = dateService.value,
+                    value = dateAnother.value,
                     textStyle = TextStyle(fontSize = 20.sp),
-                    onValueChange = {newText -> dateService.value = newText},
+                    onValueChange = { newText -> dateAnother.value = newText },
                     singleLine = true,
-                    placeholder = {Text(text = "Выбрать", fontSize = 15.sp, color = fontLight, fontStyle = FontStyle.Italic)},
+                    placeholder = {
+                        Text(
+                            text = "Выбрать",
+                            fontSize = 15.sp,
+                            color = fontLight,
+                            fontStyle = FontStyle.Italic
+                        )
+                    },
 
-                    modifier =  Modifier.fillMaxWidth(0.6f).height(55.dp).background(textformLight).border(width = 3.dp, color = advanceLight, shape = RoundedCornerShape(10.dp)).clip(RoundedCornerShape(10.dp))
+                    modifier = Modifier.fillMaxWidth(0.6f).height(55.dp).background(textformLight)
+                        .border(
+                            width = 3.dp,
+                            color = advanceLight,
+                            shape = RoundedCornerShape(10.dp)
+                        ).clip(RoundedCornerShape(10.dp))
 
 
                 )
             }
-
 
 
             //Сумма траты
             Row(Modifier.padding(top = 20.dp)) {
-                Text(text = "Сумма траты", fontSize = 20.sp, color = fontLight, fontWeight = FontWeight.SemiBold)
+                Text(
+                    text = "Сумма траты",
+                    fontSize = 26.sp,
+                    color = fontLight,
+                    fontWeight = FontWeight.SemiBold
+                )
             }
-            Row(Modifier.padding(start =15.dp, top = 5.dp ).clip(RoundedCornerShape(10.dp))) {
+            Row(Modifier.padding(start = 15.dp, top = 5.dp).clip(RoundedCornerShape(10.dp))) {
                 OutlinedTextField(
-                    value = sumService.value,
+                    value = sumAnother.value,
                     textStyle = TextStyle(fontSize = 20.sp),
-                    onValueChange = {newText -> sumService.value = newText},
+                    onValueChange = { newText -> sumAnother.value = newText },
                     singleLine = true,
-                    placeholder = {Text(text = "Сумма, ₽", fontSize = 15.sp, color = fontLight, fontStyle = FontStyle.Italic)},
+                    placeholder = {
+                        Text(
+                            text = "Сумма, ₽",
+                            fontSize = 15.sp,
+                            color = fontLight,
+                            fontStyle = FontStyle.Italic
+                        )
+                    },
 
-                    modifier =  Modifier.fillMaxWidth(0.6f).height(55.dp).background(textformLight).border(width = 3.dp, color = advanceLight, shape = RoundedCornerShape(10.dp)).clip(RoundedCornerShape(10.dp))
+                    modifier = Modifier.fillMaxWidth(0.6f).height(55.dp).background(textformLight)
+                        .border(
+                            width = 3.dp,
+                            color = advanceLight,
+                            shape = RoundedCornerShape(10.dp)
+                        ).clip(RoundedCornerShape(10.dp))
 
 
                 )
             }
 
-            //пробег
             Row(Modifier.padding(top = 20.dp)) {
-                Text(text = "Укажите пробег", fontSize = 20.sp, color = fontLight, fontWeight = FontWeight.SemiBold)
-            }
-            Row(Modifier.padding(start =15.dp, top = 5.dp ).clip(RoundedCornerShape(10.dp))) {
-                OutlinedTextField(
-                    value = distService.value,
-                    textStyle = TextStyle(fontSize = 20.sp),
-                    onValueChange = {newText -> distService.value = newText},
-                    singleLine = true,
-                    placeholder = {Text(text = "Км", fontSize = 15.sp, color = fontLight, fontStyle = FontStyle.Italic)},
-
-                    modifier =  Modifier.fillMaxWidth(0.4f).height(55.dp).background(textformLight).border(width = 3.dp, color = advanceLight, shape = RoundedCornerShape(10.dp)).clip(RoundedCornerShape(10.dp))
-
-
-                )
-            }
-
-            //комментарий
-            Row(Modifier.padding(top = 20.dp)) {
-                Text(text = "Укажите комментарий", fontSize = 20.sp, color = fontLight, fontWeight = FontWeight.SemiBold)
+                Text(text = "Укажите комментарий", fontSize = 24.sp, color = fontLight, fontWeight = FontWeight.SemiBold)
             }
 
             Box(Modifier.padding(start =15.dp, top = 5.dp ).clip(RoundedCornerShape(10.dp))) {
                 OutlinedTextField(
-                    value = commentService.value,
+                    value = commentAnother.value,
                     textStyle = TextStyle(fontSize = 20.sp),
-                    onValueChange = {newText -> commentService.value = newText},
+                    onValueChange = {newText -> commentAnother.value = newText},
                     singleLine = false,
                     placeholder = {Text(text = "Комментарий", fontSize = 15.sp, color = fontLight, fontStyle = FontStyle.Italic)},
 
@@ -162,6 +175,7 @@ private fun ContentService(){
                     Text(text = "Записать расход", fontSize = 22.sp, color = textformLight, fontStyle = FontStyle.Italic, fontWeight = FontWeight.Bold)
                 }
             }
+
         }
     }
 }
@@ -170,14 +184,13 @@ private fun ContentService(){
 
 
 
-
 @Composable
-public fun ServiceScreen(){
+public fun OthersScreen(){
     Background()
-    Column() {
+    Column {
         CommonHeader(advanceLight, fontLight, "Expanses")
-        ServiceText()
-        ContentService()
-    }
+        OthersText()
+        OthersForms()
 
+    }
 }
