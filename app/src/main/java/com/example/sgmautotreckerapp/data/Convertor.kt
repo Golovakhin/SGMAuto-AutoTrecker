@@ -3,7 +3,7 @@ package com.example.sgmautotreckerapp.data
 import androidx.room.TypeConverter
 import java.util.Date
 
-class Convertor {
+class DateConvertor {
 
     // Конвертация Дейт
     // из стэмп в дейт
