@@ -20,7 +20,7 @@ import java.util.Date
         ForeignKey(
             entity = Car::class,
             parentColumns = ["id"],
-            childColumns = ["childId"],
+            childColumns = ["userCarId"],
             onDelete = ForeignKey.CASCADE
         )
     ],
