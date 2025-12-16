@@ -4,40 +4,52 @@ import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
-import androidx.compose.foundation.background
-import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material3.Card
-import androidx.compose.material3.Scaffold
-import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.ui.Alignment
-import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.text.style.TextDirection.Companion.Content
-import androidx.compose.ui.tooling.preview.Preview
-import androidx.compose.ui.unit.dp
-import com.example.sgmautotreckerapp.screens.Content
-import com.example.sgmautotreckerapp.screens.Profile
-import com.example.sgmautotreckerapp.screens.Registration
-import com.example.sgmautotreckerapp.screens.login
+import androidx.navigation.NavType
+import androidx.navigation.compose.NavHost
+import androidx.navigation.compose.composable
+import androidx.navigation.compose.rememberNavController
+import androidx.navigation.navArgument
+import com.example.sgmautotreckerapp.screens.AnalysisScreen
+import com.example.sgmautotreckerapp.screens.GarageScreen
+import com.example.sgmautotreckerapp.screens.LoginScreen
+import com.example.sgmautotreckerapp.screens.RegistrationScreen
 import com.example.sgmautotreckerapp.ui.theme.SGMAutoTreckerAppTheme
+import dagger.hilt.android.AndroidEntryPoint
 
-
+@AndroidEntryPoint
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
         setContent {
-            Profile()
+            SGMAutoTreckerApp()
         }
     }
 }
 
+@Composable
+private fun SGMAutoTreckerApp() {
+    val navController = rememberNavController()
 
+    SGMAutoTreckerAppTheme {
+        NavHost(navController = navController, startDestination = "login") {
+            composable("login") { LoginScreen(navController) }
+            composable("register") { RegistrationScreen(navController) }
+            composable(
+                route = "garage/{userId}",
+                arguments = listOf(navArgument("userId") { type = NavType.IntType })
+            ) { backStackEntry ->
+                val userId = backStackEntry.arguments?.getInt("userId") ?: return@composable
+                GarageScreen(userId = userId, navController = navController)
+            }
+            composable(
+                route = "analysis/{userId}",
+                arguments = listOf(navArgument("userId") { type = NavType.IntType })
+            ) { backStackEntry ->
+                val userId = backStackEntry.arguments?.getInt("userId") ?: return@composable
+                AnalysisScreen(userId = userId, navController = navController)
+            }
+        }
+    }
+}

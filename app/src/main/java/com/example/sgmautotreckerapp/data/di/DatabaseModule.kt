@@ -1,8 +1,9 @@
 package com.example.sgmautotreckerapp.data.di
 
 import android.content.Context
-import com.example.sgmautotreckerapp.data.CarDatabase
+import com.example.sgmautotreckerapp.data.database.CarDatabase
 import com.example.sgmautotreckerapp.data.dao.*
+import com.example.sgmautotreckerapp.data.repository.*
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn

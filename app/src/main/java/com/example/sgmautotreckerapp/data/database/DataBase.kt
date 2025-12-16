@@ -1,4 +1,4 @@
-package com.example.sgmautotreckerapp.data
+package com.example.sgmautotreckerapp.data.database
 
 import android.content.Context
 import androidx.room.Database
@@ -6,6 +6,7 @@ import androidx.room.Room
 import androidx.room.RoomDatabase
 import androidx.room.TypeConverters
 import androidx.sqlite.db.SupportSQLiteDatabase
+import com.example.sgmautotreckerapp.data.DateConvertor
 import com.example.sgmautotreckerapp.data.dao.CarDao
 import com.example.sgmautotreckerapp.data.dao.ExpenseDao
 import com.example.sgmautotreckerapp.data.dao.UserCarDao
@@ -35,7 +36,7 @@ abstract class CarDatabase: RoomDatabase(){
                     context.applicationContext,
                     CarDatabase::class.java,
                     "car_app.db"
-                ).addCallback(object : RoomDatabase.Callback() {
+                ).addCallback(object : Callback() {
                     override fun onCreate(db: SupportSQLiteDatabase) {
                         super.onCreate(db)
                         CoroutineScope(Dispatchers.IO).launch {
