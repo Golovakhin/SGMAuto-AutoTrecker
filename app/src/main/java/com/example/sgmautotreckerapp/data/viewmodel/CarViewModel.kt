@@ -53,8 +53,16 @@ class CarViewModel @Inject constructor(
 
     fun loadAllBrands() {
         viewModelScope.launch {
-            carRepository.getAllBrands().collectLatest { brands ->
-                _allBrands.value = brands
+            try {
+                carRepository.getAllBrands().collectLatest { brands ->
+                    _allBrands.value = brands
+                }
+            } catch (e: Exception) {
+                // Если произошла ошибка, пробуем загрузить еще раз через небольшую задержку
+                kotlinx.coroutines.delay(500)
+                carRepository.getAllBrands().collectLatest { brands ->
+                    _allBrands.value = brands
+                }
             }
         }
     }

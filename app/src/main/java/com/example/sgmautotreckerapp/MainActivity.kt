@@ -10,6 +10,7 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navArgument
+import com.example.sgmautotreckerapp.screens.AddCarScreen
 import com.example.sgmautotreckerapp.screens.AnalysisScreen
 import com.example.sgmautotreckerapp.screens.GarageScreen
 import com.example.sgmautotreckerapp.screens.LoginScreen
@@ -42,6 +43,13 @@ private fun SGMAutoTreckerApp() {
             ) { backStackEntry ->
                 val userId = backStackEntry.arguments?.getInt("userId") ?: return@composable
                 GarageScreen(userId = userId, navController = navController)
+            }
+            composable(
+                route = "addCar/{userId}",
+                arguments = listOf(navArgument("userId") { type = NavType.IntType })
+            ) { backStackEntry ->
+                val userId = backStackEntry.arguments?.getInt("userId") ?: return@composable
+                AddCarScreen(userId = userId, navController = navController)
             }
             composable(
                 route = "analysis/{userId}",

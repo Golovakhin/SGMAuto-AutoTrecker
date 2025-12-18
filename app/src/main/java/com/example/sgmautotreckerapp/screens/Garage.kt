@@ -1,9 +1,8 @@
 package com.example.sgmautotreckerapp.screens
 
+import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
-import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
-import androidx.compose.foundation.Canvas
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -20,36 +19,31 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
-import androidx.compose.material3.OutlinedTextField
-import androidx.compose.material3.Text
-import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
-import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
-import androidx.compose.ui.geometry.Offset
-import androidx.compose.ui.graphics.StrokeCap
+import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.compose.material3.Text
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
-import com.example.sgmautotreckerapp.data.entity.Car
-import com.example.sgmautotreckerapp.data.entity.UserCar
+import com.example.sgmautotreckerapp.R
 import com.example.sgmautotreckerapp.commonfunction.Background
-import com.example.sgmautotreckerapp.commonfunction.Navigation
+import com.example.sgmautotreckerapp.commonfunction.MainContent
 import com.example.sgmautotreckerapp.data.viewmodel.CarViewModel
 import com.example.sgmautotreckerapp.data.viewmodel.UserCarViewModel
 import com.example.sgmautotreckerapp.ui.theme.advanceLight
@@ -58,6 +52,7 @@ import com.example.sgmautotreckerapp.ui.theme.fontLight
 import com.example.sgmautotreckerapp.ui.theme.mainLight
 import com.example.sgmautotreckerapp.ui.theme.textformLight
 import kotlinx.coroutines.launch
+import coil.compose.AsyncImage
 
 @Composable
 fun GarageScreen(
@@ -68,82 +63,52 @@ fun GarageScreen(
 ) {
     val userCars by userCarViewModel.userCars.collectAsState()
     val allCars by carViewModel.allCars.collectAsState()
-    val coroutineScope = rememberCoroutineScope()
-
-    var showAddDialog by remember { mutableStateOf(false) }
-    var errorMessage by remember { mutableStateOf<String?>(null) }
 
     val carsById = remember(allCars) { allCars.associateBy { it.id } }
 
     LaunchedEffect(userId) {
         userCarViewModel.loadUserCars(userId)
+        carViewModel.loadAllCars()
     }
 
-    Background()
-    Column {
-        Header()
-
-        if (userCars.isEmpty()) {
-            Spacer(Modifier.height(24.dp))
-            Text(
-                text = "Нет сохранённых автомобилей",
-                color = fontLight,
-                modifier = Modifier.align(Alignment.CenterHorizontally)
-            )
-        } else {
-            LazyColumn(
-                Modifier.fillMaxWidth(),
-                verticalArrangement = Arrangement.spacedBy(12.dp),
-                contentPadding = PaddingValues(top = 16.dp, bottom = 16.dp)
-            ) {
-                items(userCars, key = { it.id ?: it.hashCode() }) { userCar ->
-                    val car = carsById[userCar.carId]
-                    GarageCar(
-                        mark = car?.mark ?: "Авто",
-                        model = car?.model ?: "",
-                        generation = car?.generation ?: "",
-                        year = userCar.year,
-                        gosNumber = userCar.gosNomer
-                    )
-                }
-            }
-        }
-
-        NewCar(onAdd = { showAddDialog = true })
-        Spacer(Modifier.height(16.dp))
-        Navigation()
-    }
-
-    if (showAddDialog) {
-        AddCarDialog(
-            carViewModel = carViewModel,
-            onDismiss = { showAddDialog = false },
-            onSave = { gos, vin, year, car ->
-                if (car == null) {
-                    errorMessage = "Выберите модель автомобиля"
-                    return@AddCarDialog
-                }
-                coroutineScope.launch {
-                    try {
-                        userCarViewModel.addUserCar(
-                            UserCar(
-                                userId = userId,
-                                carId = car.id ?: 0,
-                                gosNomer = gos,
-                                vin = vin,
-                                year = year
-                            )
+    MainContent(
+        contentFunctions = listOf(
+            { Header() },
+            {
+                if (userCars.isEmpty()) {
+                    Spacer(Modifier.height(24.dp))
+                    Box(
+                        Modifier.fillMaxWidth(),
+                        contentAlignment = Alignment.Center
+                    ) {
+                        Text(
+                            text = "Нет сохранённых автомобилей",
+                            color = fontLight
                         )
-                        userCarViewModel.loadUserCars(userId)
-                        showAddDialog = false
-                        errorMessage = null
-                    } catch (e: Exception) {
-                        errorMessage = e.message
+                    }
+                } else {
+                    LazyColumn(
+                        Modifier.fillMaxWidth(),
+                        verticalArrangement = Arrangement.spacedBy(12.dp),
+                        contentPadding = PaddingValues(top = 16.dp, bottom = 16.dp)
+                    ) {
+                        items(userCars, key = { it.id ?: it.hashCode() }) { userCar ->
+                            val car = carsById[userCar.carId]
+                            GarageCar(
+                                mark = car?.mark ?: "Авто",
+                                model = car?.model ?: "",
+                                generation = car?.generation ?: "",
+                                year = userCar.year,
+                                gosNumber = userCar.gosNomer,
+                                imageUrl = car?.imageURl
+                            )
+                        }
                     }
                 }
-            }
+            },
+            { NewCar(onAdd = { navController.navigate("addCar/$userId") }) }
         )
-    }
+    )
 }
 
 @Composable
@@ -172,7 +137,8 @@ public fun GarageCar(
     model: String,
     generation: String,
     year: Int,
-    gosNumber: String
+    gosNumber: String,
+    imageUrl: String? = null
 ) {
     Row(
         Modifier
@@ -190,46 +156,81 @@ public fun GarageCar(
                 .background(fontLight)
         ) {
             Column(Modifier.fillMaxSize()) {
+                // Верхняя часть: название машины по центру
                 Row(
                     Modifier
                         .fillMaxWidth()
-                        .fillMaxHeight(0.5f),
+                        .fillMaxHeight(0.4f),
                     horizontalArrangement = Arrangement.Center,
                     verticalAlignment = Alignment.CenterVertically
                 ) {
-                    Column(horizontalAlignment = Alignment.CenterHorizontally) {
+                    Column(
+                        horizontalAlignment = Alignment.CenterHorizontally,
+                        verticalArrangement = Arrangement.Center
+                    ) {
                         Text(text = mark, fontSize = 30.sp, color = backgroundLight)
-                        Text(text = model, fontSize = 30.sp, color = backgroundLight)
+                        Text(text = model, fontSize = 26.sp, color = backgroundLight)
                     }
                 }
-                Row(Modifier.fillMaxSize()) {
-                    Row(
+
+                // Нижняя часть: характеристики слева, картинка в правом нижнем углу
+                Box(
+                    Modifier
+                        .fillMaxSize()
+                        .padding(bottom = 10.dp, end = 10.dp)
+                ) {
+                    // Характеристики слева
+                    Column(
                         Modifier
-                            .fillMaxHeight()
-                            .fillMaxWidth(0.5f),
-                        verticalAlignment = Alignment.CenterVertically
+                            .align(Alignment.CenterStart)
+                            .padding(start = 15.dp),
+                        verticalArrangement = Arrangement.Center
                     ) {
-                        Column(
-                            Modifier.padding(start = 15.dp, bottom = 10.dp),
-                            verticalArrangement = Arrangement.Center
-                        ) {
-                            Text(
-                                text = "Year: $year",
-                                fontSize = 14.sp,
-                                lineHeight = 23.sp,
-                                color = backgroundLight
+                        Text(
+                            text = "Year: $year",
+                            fontSize = 14.sp,
+                            lineHeight = 23.sp,
+                            color = backgroundLight
+                        )
+                        Text(
+                            text = "Generation: $generation",
+                            fontSize = 14.sp,
+                            lineHeight = 23.sp,
+                            color = backgroundLight
+                        )
+                        Text(
+                            text = "Number: $gosNumber",
+                            fontSize = 14.sp,
+                            lineHeight = 23.sp,
+                            color = backgroundLight
+                        )
+                    }
+
+                    // Иконка машины в правом нижнем углу
+                    Box(
+                        Modifier
+                            .align(Alignment.BottomEnd)
+                            .size(120.dp)
+                    ) {
+                        if (!imageUrl.isNullOrBlank()) {
+                            AsyncImage(
+                                model = imageUrl,
+                                contentDescription = "$mark $model",
+                                modifier = Modifier
+                                    .fillMaxSize()
+                                    .clip(RoundedCornerShape(20.dp)),
+                                contentScale = ContentScale.Crop,
+                                placeholder = painterResource(id = R.drawable.ic_launcher_foreground),
+                                error = painterResource(id = R.drawable.ic_launcher_foreground)
                             )
-                            Text(
-                                text = "Generation: $generation",
-                                fontSize = 14.sp,
-                                lineHeight = 23.sp,
-                                color = backgroundLight
-                            )
-                            Text(
-                                text = "Number: $gosNumber",
-                                fontSize = 14.sp,
-                                lineHeight = 23.sp,
-                                color = backgroundLight
+                        } else {
+                            Image(
+                                painter = painterResource(id = R.drawable.ic_launcher_foreground),
+                                contentDescription = "$mark $model",
+                                modifier = Modifier
+                                    .fillMaxSize()
+                                    .clip(RoundedCornerShape(20.dp)),
+                                contentScale = ContentScale.Crop
                             )
                         }
                     }
@@ -255,7 +256,6 @@ private fun NewCar(onAdd: () -> Unit) {
                 .height(200.dp)
                 .clip(RoundedCornerShape(25.dp))
                 .background(fontLight)
-                .clickable { onAdd() }
         ) {
             Column {
                 Row(
@@ -269,30 +269,23 @@ private fun NewCar(onAdd: () -> Unit) {
                 }
                 Row(
                     Modifier.fillMaxSize(),
-                    horizontalArrangement = Arrangement.Center
+                    horizontalArrangement = Arrangement.Center,
+                    verticalAlignment = Alignment.CenterVertically
                 ) {
-                    Canvas(
-                        Modifier
-                            .size(85.dp)
-                            .clip(shape = CircleShape)
+                    Button(
+                        onClick = onAdd,
+                        modifier = Modifier.size(85.dp),
+                        shape = CircleShape,
+                        colors = ButtonDefaults.buttonColors(
+                            containerColor = backgroundLight
+                        ),
+                        contentPadding = PaddingValues(0.dp)
                     ) {
-                        drawCircle(
-                            color = backgroundLight,
-                            radius = 42.5.dp.toPx()
-                        )
-                        drawLine(
+                        Text(
+                            text = "+",
                             color = fontLight,
-                            start = Offset(x = size.width / 3, y = size.height / 2),
-                            end = Offset(x = size.width - size.width / 3, y = size.height / 2),
-                            strokeWidth = 20f,
-                            cap = StrokeCap.Round
-                        )
-                        drawLine(
-                            color = fontLight,
-                            start = Offset(x = size.width / 2, y = size.height / 3),
-                            end = Offset(x = size.width / 2, y = size.height - size.height / 3),
-                            strokeWidth = 20f,
-                            cap = StrokeCap.Round
+                            fontSize = 40.sp,
+                            fontWeight = FontWeight.Bold
                         )
                     }
                 }
@@ -301,143 +294,4 @@ private fun NewCar(onAdd: () -> Unit) {
     }
 }
 
-@Composable
-private fun AddCarDialog(
-    carViewModel: CarViewModel,
-    onDismiss: () -> Unit,
-    onSave: (gosNomer: String, vin: String, year: Int, car: Car?) -> Unit
-) {
-    val brands by carViewModel.allBrands.collectAsState()
-    val models by carViewModel.modelsByBrand.collectAsState()
-
-    var selectedBrand by remember { mutableStateOf("") }
-    var selectedCar by remember { mutableStateOf<Car?>(null) }
-    var gosNomer by remember { mutableStateOf("") }
-    var vin by remember { mutableStateOf("") }
-    var year by remember { mutableStateOf("") }
-    var localError by remember { mutableStateOf<String?>(null) }
-    var brandExpanded by remember { mutableStateOf(false) }
-    var modelExpanded by remember { mutableStateOf(false) }
-
-    LaunchedEffect(selectedBrand) {
-        if (selectedBrand.isNotBlank()) {
-            carViewModel.loadModelsByBrand(selectedBrand)
-            selectedCar = null
-        }
-    }
-
-    AlertDialog(
-        onDismissRequest = onDismiss,
-        title = { Text(text = "Новый автомобиль") },
-        text = {
-            Column(verticalArrangement = Arrangement.spacedBy(10.dp)) {
-                Column {
-                    OutlinedTextField(
-                        value = selectedBrand,
-                        onValueChange = {},
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .clickable { brandExpanded = true },
-                        readOnly = true,
-                        label = { Text("Марка") },
-                        placeholder = { Text("Выберите марку") },
-                        trailingIcon = { Text("▼") }
-                    )
-                    androidx.compose.material3.DropdownMenu(
-                        expanded = brandExpanded,
-                        onDismissRequest = { brandExpanded = false }
-                    ) {
-                        brands.forEach { brand ->
-                            Text(
-                                text = brand,
-                                modifier = Modifier
-                                    .fillMaxWidth()
-                                    .clickable {
-                                        selectedBrand = brand
-                                        brandExpanded = false
-                                    }
-                                    .padding(12.dp)
-                            )
-                        }
-                    }
-                }
-
-                Column {
-                    OutlinedTextField(
-                        value = selectedCar?.let { "${it.model} ${it.generation}" } ?: "",
-                        onValueChange = {},
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .clickable { modelExpanded = true },
-                        readOnly = true,
-                        label = { Text("Модель") },
-                        placeholder = { Text("Выберите модель") },
-                        trailingIcon = { Text("▼") }
-                    )
-                    androidx.compose.material3.DropdownMenu(
-                        expanded = modelExpanded,
-                        onDismissRequest = { modelExpanded = false }
-                    ) {
-                        models.forEach { car ->
-                            Text(
-                                text = "${car.model} ${car.generation}",
-                                modifier = Modifier
-                                    .fillMaxWidth()
-                                    .clickable {
-                                        selectedCar = car
-                                        modelExpanded = false
-                                    }
-                                    .padding(12.dp)
-                            )
-                        }
-                    }
-                }
-
-                OutlinedTextField(
-                    value = gosNomer,
-                    onValueChange = { gosNomer = it },
-                    modifier = Modifier.fillMaxWidth(),
-                    label = { Text("Госномер") },
-                    placeholder = { Text("Р805ХР33") }
-                )
-
-                OutlinedTextField(
-                    value = vin,
-                    onValueChange = { vin = it },
-                    modifier = Modifier.fillMaxWidth(),
-                    label = { Text("VIN") },
-                    placeholder = { Text("17 символов") }
-                )
-
-                OutlinedTextField(
-                    value = year,
-                    onValueChange = { year = it.filter { ch -> ch.isDigit() } },
-                    modifier = Modifier.fillMaxWidth(),
-                    label = { Text("Год выпуска") },
-                    placeholder = { Text("2024") }
-                )
-
-                if (localError != null) {
-                    Text(text = localError!!, color = mainLight)
-                }
-            }
-        },
-        confirmButton = {
-            Button(onClick = {
-                localError = null
-                val yearInt = year.toIntOrNull()
-                if (gosNomer.isBlank() || vin.isBlank() || yearInt == null) {
-                    localError = "Заполните все поля"
-                    return@Button
-                }
-                onSave(gosNomer, vin, yearInt, selectedCar)
-            }) {
-                Text("Сохранить")
-            }
-        },
-        dismissButton = {
-            TextButton(onClick = onDismiss) { Text("Отмена") }
-        }
-    )
-}
 

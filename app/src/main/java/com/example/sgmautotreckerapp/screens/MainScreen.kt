@@ -26,7 +26,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.sgmautotreckerapp.Segment
 import com.example.sgmautotreckerapp.commonfunction.Background
-import com.example.sgmautotreckerapp.commonfunction.Navigation
+import com.example.sgmautotreckerapp.commonfunction.MainContent
 import com.example.sgmautotreckerapp.ui.theme.advanceLight
 import com.example.sgmautotreckerapp.ui.theme.backgroundAdvanceLight
 import com.example.sgmautotreckerapp.ui.theme.backgroundLight
@@ -202,12 +202,12 @@ private fun Legend(){
 
 @Composable
 public fun MainScreen(){
-    Background()
-    Column {
-        AppBar()
-        CarMain()
-        Analitika()
-        AnotherBlocks()
-        Navigation()
-    }
+    MainContent(
+        contentFunctions = listOf(
+            { AppBar() },
+            { CarMain() },
+            { Analitika() },
+            { AnotherBlocks() }
+        )
+    )
 }

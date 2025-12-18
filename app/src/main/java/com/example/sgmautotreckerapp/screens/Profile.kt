@@ -26,7 +26,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.sgmautotreckerapp.commonfunction.Background
-import com.example.sgmautotreckerapp.commonfunction.Navigation
+import com.example.sgmautotreckerapp.commonfunction.MainContent
 import com.example.sgmautotreckerapp.ui.theme.advanceLight
 import com.example.sgmautotreckerapp.ui.theme.backgroundAdvanceLight
 import com.example.sgmautotreckerapp.ui.theme.fontLight
@@ -206,13 +206,13 @@ public fun Button_Profile2(){
 
 @Composable
 public fun Profile(){
-    Background()
-    Column {
-        Header_Profile()
-        Info_Profile()
-        Text_Profile()
-        Button_Profile1()
-        Button_Profile2()
-        Navigation()
-    }
+    MainContent(
+        contentFunctions = listOf(
+            { Header_Profile() },
+            { Info_Profile() },
+            { Text_Profile() },
+            { Button_Profile1() },
+            { Button_Profile2() }
+        )
+    )
 }

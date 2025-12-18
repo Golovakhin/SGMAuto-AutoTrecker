@@ -43,7 +43,7 @@ import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
 import com.example.sgmautotreckerapp.commonfunction.Background
-import com.example.sgmautotreckerapp.commonfunction.Navigation
+import com.example.sgmautotreckerapp.commonfunction.MainContent
 import com.example.sgmautotreckerapp.data.entity.Expense
 import com.example.sgmautotreckerapp.data.entity.UserCar
 import com.example.sgmautotreckerapp.data.viewmodel.ExpenseViewModel
@@ -83,30 +83,31 @@ fun AnalysisScreen(
     }
     val totalAmount = totals.values.sum().takeIf { it > 0 } ?: 1.0
 
-    Background()
-    Column {
-        Info()
-        AnalysisRing(totals = totals, totalAmount = totalAmount)
-        Legend(totals = totals)
-        Spacer(Modifier.height(12.dp))
-        Button(
-            onClick = { showAddDialog = true },
-            colors = ButtonDefaults.buttonColors(mainLight),
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(horizontal = 24.dp)
-        ) { Text("Добавить расход", color = backgroundLight) }
-        if (localError != null) {
-            Text(
-                text = localError!!,
-                color = mainLight,
-                modifier = Modifier
-                    .padding(top = 6.dp, start = 24.dp, end = 24.dp)
-            )
-        }
-        Spacer(Modifier.height(8.dp))
-        Navigation()
-    }
+    MainContent(
+        contentFunctions = listOf(
+            { Info() },
+            { AnalysisRing(totals = totals, totalAmount = totalAmount) },
+            { Legend(totals = totals) },
+            {
+                Spacer(Modifier.height(12.dp))
+                Button(
+                    onClick = { showAddDialog = true },
+                    colors = ButtonDefaults.buttonColors(mainLight),
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(horizontal = 24.dp)
+                ) { Text("Добавить расход", color = backgroundLight) }
+                if (localError != null) {
+                    Text(
+                        text = localError!!,
+                        color = mainLight,
+                        modifier = Modifier
+                            .padding(top = 6.dp, start = 24.dp, end = 24.dp)
+                    )
+                }
+            }
+        )
+    )
 
     if (showAddDialog) {
         AddExpenseDialog(
