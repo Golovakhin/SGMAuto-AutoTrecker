@@ -84,6 +84,8 @@ fun AnalysisScreen(
     val totalAmount = totals.values.sum().takeIf { it > 0 } ?: 1.0
 
     MainContent(
+        navController = navController,
+        userId = userId,
         contentFunctions = listOf(
             { Info() },
             { AnalysisRing(totals = totals, totalAmount = totalAmount) },

@@ -201,8 +201,13 @@ private fun Legend(){
 
 
 @Composable
-public fun MainScreen(){
+public fun MainScreen(
+    navController: androidx.navigation.NavController? = null,
+    userId: Int? = null
+){
     MainContent(
+        navController = navController,
+        userId = userId,
         contentFunctions = listOf(
             { AppBar() },
             { CarMain() },

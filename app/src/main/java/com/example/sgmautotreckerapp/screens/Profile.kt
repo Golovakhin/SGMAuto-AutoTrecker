@@ -205,8 +205,13 @@ public fun Button_Profile2(){
 
 
 @Composable
-public fun Profile(){
+public fun Profile(
+    navController: androidx.navigation.NavController? = null,
+    userId: Int? = null
+){
     MainContent(
+        navController = navController,
+        userId = userId,
         contentFunctions = listOf(
             { Header_Profile() },
             { Info_Profile() },

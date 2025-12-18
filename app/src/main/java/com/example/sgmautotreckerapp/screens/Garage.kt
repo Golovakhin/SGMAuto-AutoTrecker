@@ -72,6 +72,9 @@ fun GarageScreen(
     }
 
     MainContent(
+        navController = navController,
+        userId = userId,
+        onAddClick = { navController.navigate("addCar/$userId") },
         contentFunctions = listOf(
             { Header() },
             {
