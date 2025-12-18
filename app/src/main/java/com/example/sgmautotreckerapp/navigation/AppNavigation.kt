@@ -9,6 +9,7 @@ import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navArgument
 import com.example.sgmautotreckerapp.screens.AddCarScreen
 import com.example.sgmautotreckerapp.screens.AnalysisScreen
+import com.example.sgmautotreckerapp.screens.CategoryScreen
 import com.example.sgmautotreckerapp.screens.GarageScreen
 import com.example.sgmautotreckerapp.screens.LoginScreen
 import com.example.sgmautotreckerapp.screens.MainScreen
@@ -26,6 +27,7 @@ object AppRoutes {
     const val GARAGE = "garage/{userId}"
     const val PROFILE = "profile/{userId}"
     const val ADD_CAR = "addCar/{userId}"
+    const val CATEGORY = "category"
     
     // Функции для создания маршрутов с параметрами
     fun mainRoute(userId: Int) = "main/$userId"
@@ -33,6 +35,7 @@ object AppRoutes {
     fun garageRoute(userId: Int) = "garage/$userId"
     fun profileRoute(userId: Int) = "profile/$userId"
     fun addCarRoute(userId: Int) = "addCar/$userId"
+    fun categoryRoute() = CATEGORY
 }
 
 @Composable
@@ -117,6 +120,11 @@ fun AppNavigation(
                 userId = userId,
                 navController = navController
             )
+        }
+
+        // Экран выбора категории расходов
+        composable(AppRoutes.CATEGORY) {
+            CategoryScreen()
         }
     }
 }

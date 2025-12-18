@@ -39,6 +39,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import com.example.sgmautotreckerapp.R
+import com.example.sgmautotreckerapp.navigation.AppRoutes
 import com.example.sgmautotreckerapp.ui.theme.advanceLight
 import com.example.sgmautotreckerapp.ui.theme.backgroundLight
 import com.example.sgmautotreckerapp.ui.theme.fontLight
@@ -175,10 +176,10 @@ public fun MainContent(
         floatingActionButton = {
             LargeFloatingActionButton(
                 onClick = {
-                    if (onAddClick != null) {
-                        onAddClick()
-                    } else if (navController != null && userId != null) {
-                        navController.navigate("addCar/$userId")
+                    if (navController != null) {
+                        navController.navigate(AppRoutes.CATEGORY)
+                    } else {
+                        onAddClick?.invoke()
                     }
                 },
                 Modifier.offset(y = 64.dp),
