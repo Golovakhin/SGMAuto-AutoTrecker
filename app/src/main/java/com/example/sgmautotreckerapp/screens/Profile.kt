@@ -18,17 +18,21 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.hilt.navigation.compose.hiltViewModel
 import com.example.sgmautotreckerapp.R
 import com.example.sgmautotreckerapp.commonfunction.MainContent
+import com.example.sgmautotreckerapp.data.viewmodel.AuthViewModel
 import com.example.sgmautotreckerapp.navigation.AppRoutes
 import com.example.sgmautotreckerapp.ui.theme.backgroundAdvanceLight
 import com.example.sgmautotreckerapp.ui.theme.fontLight
@@ -56,80 +60,89 @@ public fun Header_Profile() {
 
 @Composable
 public fun Info_Profile(
+    userName: String?,
+    email: String?,
     onLogout: () -> Unit
 ) {
     Spacer(Modifier.fillMaxHeight(0.05f))
+
     Row(
         modifier = Modifier
-            .fillMaxWidth()
-            .fillMaxHeight(0.33f),
+            .fillMaxWidth(),
         horizontalArrangement = Arrangement.Center
     ) {
-        Box(
-            Modifier
-                .fillMaxHeight()
-                .fillMaxWidth(0.8f)
-                .background(color = fontLight, shape = RoundedCornerShape(25.dp)),
-            contentAlignment = Alignment.TopCenter
+        Column(
+            modifier = Modifier
+                .fillMaxWidth(0.9f)
         ) {
-            Row(
-                Modifier
-                    .fillMaxHeight()
-                    .fillMaxWidth(),
-                horizontalArrangement = Arrangement.End,
-                verticalAlignment = Alignment.Top
+            // Карточка аватара с кнопкой выхода
+            Box(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .height(220.dp)
+                    .background(color = fontLight, shape = RoundedCornerShape(25.dp))
             ) {
-                Image(
-                    painter = painterResource(id = R.drawable.ic_out_profile),
-                    contentDescription = "Logout",
+                // Кнопка выхода справа сверху
+                Row(
+                    Modifier
+                        .fillMaxWidth()
+                        .padding(top = 20.dp, end = 20.dp),
+                    horizontalArrangement = Arrangement.End,
+                    verticalAlignment = Alignment.Top
+                ) {
+                    Image(
+                        painter = painterResource(id = R.drawable.ic_out_profile),
+                        contentDescription = "Logout",
+                        modifier = Modifier
+                            .size(32.dp)
+                            .clickable { onLogout() }
+                    )
+                }
+
+                // Центральный контент: аватар, имя и почта строго друг под другом
+                Column(
                     modifier = Modifier
-                        .padding(top = 20.dp, end = 20.dp)
-                        .size(32.dp)
-                        .clickable { onLogout() }
-                )
-            }
-            Column(
-                Modifier
-                    .padding(top = 20.dp)
-                    .fillMaxHeight(0.4f)
-                    .fillMaxWidth(0.33f)
-                    .background(
+                        .fillMaxSize(),
+                    horizontalAlignment = Alignment.CenterHorizontally,
+                    verticalArrangement = Arrangement.Center
+                ) {
+                    Box(
+                        modifier = Modifier
+                            .size(120.dp)
+                            .background(
+                                color = backgroundAdvanceLight,
+                                shape = RoundedCornerShape(25.dp)
+                            ),
+                        contentAlignment = Alignment.Center
+                    ) {
+                        Image(
+                            painter = painterResource(id = R.drawable.ic_avatar_user),
+                            contentDescription = "User avatar",
+                            modifier = Modifier
+                                .size(96.dp)
+                                .clip(RoundedCornerShape(25.dp))
+                        )
+                    }
+
+                    Spacer(modifier = Modifier.height(12.dp))
+
+                    Text(
+                        text = userName ?: "Имя пользователя",
+                        fontSize = 20.sp,
                         color = backgroundAdvanceLight,
-                        shape = RoundedCornerShape(25.dp)
-                    ),
-                horizontalAlignment = Alignment.CenterHorizontally,
-                verticalArrangement = Arrangement.Center
-            ) {
-                Image(
-                    painter = painterResource(id = R.drawable.ic_avatar_user),
-                    contentDescription = "User avatar",
-                    modifier = Modifier
-                        .size(96.dp)
-                        .clip(RoundedCornerShape(25.dp))
-                )
-            }
-            Column(
-                Modifier
-                    .padding(top = 160.dp)
-            ) {
-                Text(
-                    "Дмитрий Нагиев",
-                    fontSize = 20.sp,
-                    color = backgroundAdvanceLight,
-                    fontWeight = FontWeight.Bold,
-                    fontStyle = FontStyle.Italic
-                )
-            }
-            Column(
-                Modifier
-                    .padding(top = 220.dp)
-            ) {
-                Text(
-                    "Dimka_Nagiev@mail.ru",
-                    fontSize = 14.sp,
-                    color = backgroundAdvanceLight,
-                    fontStyle = FontStyle.Italic
-                )
+                        fontWeight = FontWeight.Bold,
+                        fontStyle = FontStyle.Italic
+                    )
+
+                    Spacer(modifier = Modifier.height(4.dp))
+
+                    Text(
+                        text = email ?: "email@example.com",
+                        fontSize = 14.sp,
+                        color = backgroundAdvanceLight,
+                        fontStyle = FontStyle.Italic
+                    )
+                }
             }
         }
     }
@@ -155,7 +168,7 @@ public fun Button_Profile1() {
     Row(
         modifier = Modifier
             .fillMaxWidth()
-            .height(100.dp),
+            .height(110.dp),
         horizontalArrangement = Arrangement.Center
     ) {
         Row(
@@ -179,8 +192,17 @@ public fun Button_Profile1() {
                         .background(
                             color = fontLight,
                             shape = RoundedCornerShape(25.dp)
-                        )
-                ) {}
+                        ),
+                    contentAlignment = Alignment.Center
+                ) {
+                    Image(
+                        painter = painterResource(id = R.drawable.ic_setting),
+                        contentDescription = "Profile settings",
+                        modifier = Modifier
+                            .fillMaxSize()
+                            .padding(12.dp)
+                    )
+                }
             }
             Column(
                 modifier = Modifier
@@ -201,7 +223,7 @@ public fun Button_Profile1() {
                 )
                 Text(
                     "Обнови или модифицируй свой профиль",
-                    Modifier.padding(top = 20.dp, start = 20.dp),
+                    Modifier.padding(top = 8.dp, start = 20.dp),
                     color = backgroundAdvanceLight,
                     fontSize = 12.sp,
                     fontStyle = FontStyle.Italic
@@ -217,7 +239,7 @@ public fun Button_Profile2() {
     Row(
         modifier = Modifier
             .fillMaxWidth()
-            .height(100.dp),
+            .height(110.dp),
         horizontalArrangement = Arrangement.Center
     ) {
         Row(
@@ -241,8 +263,17 @@ public fun Button_Profile2() {
                         .background(
                             color = fontLight,
                             shape = RoundedCornerShape(25.dp)
-                        )
-                ) {}
+                        ),
+                    contentAlignment = Alignment.Center
+                ) {
+                    Image(
+                        painter = painterResource(id = R.drawable.ic_safety),
+                        contentDescription = "Security settings",
+                        modifier = Modifier
+                            .fillMaxSize()
+                            .padding(12.dp)
+                    )
+                }
             }
             Column(
                 modifier = Modifier
@@ -263,7 +294,7 @@ public fun Button_Profile2() {
                 )
                 Text(
                     "Изменить пароль",
-                    Modifier.padding(top = 20.dp, start = 20.dp),
+                    Modifier.padding(top = 8.dp, start = 20.dp),
                     color = backgroundAdvanceLight,
                     fontSize = 12.sp,
                     fontStyle = FontStyle.Italic
@@ -277,8 +308,15 @@ public fun Button_Profile2() {
 @Composable
 public fun Profile(
     navController: androidx.navigation.NavController? = null,
-    userId: Int? = null
+    userId: Int? = null,
+    authViewModel: AuthViewModel = hiltViewModel()
 ) {
+    val currentUser by authViewModel.currentUser.collectAsState()
+
+    LaunchedEffect(userId) {
+        userId?.let { authViewModel.getCurrentUser(it) }
+    }
+
     MainContent(
         navController = navController,
         userId = userId,
@@ -286,7 +324,10 @@ public fun Profile(
             { Header_Profile() },
             {
                 Info_Profile(
+                    userName = currentUser?.userName,
+                    email = currentUser?.email,
                     onLogout = {
+                        authViewModel.logout()
                         navController?.navigate(AppRoutes.LOGIN) {
                             popUpTo(0) { inclusive = true }
                         }
