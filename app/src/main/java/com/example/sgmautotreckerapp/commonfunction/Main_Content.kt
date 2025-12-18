@@ -130,7 +130,7 @@ public fun MainContent(
                         contentAlignment = Alignment.Center
                     ) {
                         Image(
-                            painter = painterResource(id = R.drawable.ic_car),
+                            painter = painterResource(id = R.drawable.ic_car_1),
                             contentDescription = "Garage",
                             modifier = Modifier.size(28.dp),
                             colorFilter = ColorFilter.tint(Color.Black)
