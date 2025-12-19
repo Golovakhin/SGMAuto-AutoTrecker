@@ -17,7 +17,9 @@ class UserCarRepository @Inject constructor(
     // Получение конкретного автомобиля пользователя по ID
     suspend fun getUserCarById(userCarId: Int): UserCar? = userCarDao.getUserCarById(userCarId)
 
-    // Методы для обновления и удаления (если добавите в DAO)
+    // Удаление автомобиля пользователя по ID
+    suspend fun deleteUserCar(userCarId: Int) = userCarDao.deleteUserCar(userCarId)
+
+    // Методы для обновления (если добавите в DAO)
     // suspend fun updateUserCar(userCar: UserCar) = userCarDao.update(userCar)
-    // suspend fun deleteUserCar(userCar: UserCar) = userCarDao.delete(userCar)
 }

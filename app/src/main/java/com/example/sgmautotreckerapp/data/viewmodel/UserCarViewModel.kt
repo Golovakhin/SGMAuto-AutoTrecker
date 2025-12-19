@@ -4,6 +4,7 @@ package com.example.sgmautotreckerapp.data.viewmodel
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.sgmautotreckerapp.data.entity.UserCar
+import com.example.sgmautotreckerapp.data.repository.ExpenseRepository
 import com.example.sgmautotreckerapp.data.repository.UserCarRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -15,7 +16,8 @@ import javax.inject.Inject
 
 @HiltViewModel
 class UserCarViewModel @Inject constructor(
-    private val userCarRepository: UserCarRepository
+    private val userCarRepository: UserCarRepository,
+    private val expenseRepository: ExpenseRepository
 ) : ViewModel() {
 
     private val _userCars = MutableStateFlow<List<UserCar>>(emptyList())
@@ -62,6 +64,23 @@ class UserCarViewModel @Inject constructor(
 
     fun clearUserCars() {
         _userCars.value = emptyList()
+    }
+
+    fun deleteUserCar(userCarId: Int, userId: Int) {
+        viewModelScope.launch {
+            _state.value = UserCarState.Loading
+            try {
+                // Сначала удаляем связанные расходы
+                expenseRepository.deleteExpensesByUserCarId(userCarId)
+                // Затем удаляем автомобиль пользователя
+                userCarRepository.deleteUserCar(userCarId)
+                // Обновляем список автомобилей
+                loadUserCars(userId)
+                _state.value = UserCarState.Success
+            } catch (e: Exception) {
+                _state.value = UserCarState.Error("Ошибка удаления автомобиля: ${e.message}")
+            }
+        }
     }
 
     sealed class UserCarState {

@@ -105,7 +105,7 @@ private fun Analitika(
     val totals = expenses.groupBy { it.expenseType }.mapValues { entry ->
         entry.value.sumOf { it.amount }
     }
-    val totalAmount = totals.values.sum().takeIf { it > 0 } ?: 1.0
+    val totalAmount = totals.values.sum()
     Spacer(Modifier.fillMaxWidth().fillMaxHeight(0.05f))
 
     Row(Modifier.fillMaxWidth().fillMaxHeight(0.25f), horizontalArrangement = Arrangement.Center) {

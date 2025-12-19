@@ -18,4 +18,7 @@ interface UserCarDao {
 
     @Query("SELECT * FROM user_cars WHERE id = :userCarId")
     suspend fun getUserCarById(userCarId: Int): UserCar?
+
+    @Query("DELETE FROM user_cars WHERE id = :userCarId")
+    suspend fun deleteUserCar(userCarId: Int)
 }

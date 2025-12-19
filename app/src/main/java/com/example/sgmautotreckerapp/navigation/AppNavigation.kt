@@ -15,6 +15,7 @@ import com.example.sgmautotreckerapp.screens.LoginScreen
 import com.example.sgmautotreckerapp.screens.MainScreen
 import com.example.sgmautotreckerapp.screens.Profile
 import com.example.sgmautotreckerapp.screens.RegistrationScreen
+import com.example.sgmautotreckerapp.screens.SettingsScreen
 import com.example.sgmautotreckerapp.screens.CategoryScreens.CarWashScreen
 import com.example.sgmautotreckerapp.screens.CategoryScreens.FinesTaxesScreen
 import com.example.sgmautotreckerapp.screens.CategoryScreens.FuelScreen
@@ -42,6 +43,7 @@ object AppRoutes {
     const val CATEGORY_CAR_WASH = "category_car_wash/{userId}"
     const val CATEGORY_INSURANCE = "category_insurance/{userId}"
     const val CATEGORY_OTHERS = "category_others/{userId}"
+    const val SETTINGS = "settings/{userId}"
     
     // Функции для создания маршрутов с параметрами
     fun mainRoute(userId: Int) = "main/$userId"
@@ -62,7 +64,8 @@ object AppRoutes {
 @Composable
 fun AppNavigation(
     navController: NavHostController = rememberNavController(),
-    startDestination: String = AppRoutes.LOGIN
+    startDestination: String = AppRoutes.LOGIN,
+    onThemeChange: ((Boolean) -> Unit)? = null
 ) {
     NavHost(
         navController = navController,
@@ -201,6 +204,19 @@ fun AppNavigation(
         ) { backStackEntry ->
             val userId = backStackEntry.arguments?.getInt("userId") ?: return@composable
             OthersScreen(navController = navController, userId = userId)
+        }
+
+        // Экран настроек
+        composable(
+            route = AppRoutes.SETTINGS,
+            arguments = listOf(navArgument("userId") { type = NavType.IntType })
+        ) { backStackEntry ->
+            val userId = backStackEntry.arguments?.getInt("userId") ?: return@composable
+            SettingsScreen(
+                userId = userId,
+                navController = navController,
+                onThemeChange = onThemeChange
+            )
         }
     }
 }

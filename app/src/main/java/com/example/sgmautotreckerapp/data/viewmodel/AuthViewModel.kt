@@ -106,6 +106,19 @@ class AuthViewModel @Inject constructor(
         _loginState.value = LoginState.Idle
     }
 
+    fun updateUserName(userId: Int, userName: String) {
+        viewModelScope.launch {
+            try {
+                userRepository.updateUserName(userId, userName)
+                // Обновляем текущего пользователя
+                val user = userRepository.getUserById(userId)
+                _currentUser.value = user
+            } catch (e: Exception) {
+                // Обработка ошибки
+            }
+        }
+    }
+
     sealed class RegistrationState {
         object Idle : RegistrationState()
         object Loading : RegistrationState()

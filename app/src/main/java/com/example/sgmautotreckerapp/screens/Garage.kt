@@ -31,6 +31,7 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.TextStyle
@@ -48,6 +49,7 @@ import com.example.sgmautotreckerapp.data.viewmodel.CarViewModel
 import com.example.sgmautotreckerapp.data.viewmodel.UserCarViewModel
 import com.example.sgmautotreckerapp.ui.theme.advanceLight
 import com.example.sgmautotreckerapp.ui.theme.backgroundLight
+import com.example.sgmautotreckerapp.ui.theme.circleColor
 import com.example.sgmautotreckerapp.ui.theme.fontLight
 import com.example.sgmautotreckerapp.ui.theme.mainLight
 import com.example.sgmautotreckerapp.ui.theme.textformLight
@@ -103,7 +105,9 @@ fun GarageScreen(
                                 generation = car?.generation ?: "",
                                 year = userCar.year,
                                 gosNumber = userCar.gosNomer,
-                                imageUrl = car?.imageURl
+                                imageUrl = car?.imageURl,
+                                userCarId = userCar.id,
+                                onDelete = { userCar.id?.let { userCarViewModel.deleteUserCar(it, userId) } }
                             )
                         }
                     }
@@ -141,7 +145,9 @@ public fun GarageCar(
     generation: String,
     year: Int,
     gosNumber: String,
-    imageUrl: String? = null
+    imageUrl: String? = null,
+    userCarId: Int? = null,
+    onDelete: (() -> Unit)? = null
 ) {
     Row(
         Modifier
@@ -159,20 +165,47 @@ public fun GarageCar(
                 .background(fontLight)
         ) {
             Column(Modifier.fillMaxSize()) {
-                // Верхняя часть: название машины по центру
-                Row(
+                // Верхняя часть: название машины по центру и кнопка удаления
+                Box(
                     Modifier
                         .fillMaxWidth()
-                        .fillMaxHeight(0.4f),
-                    horizontalArrangement = Arrangement.Center,
-                    verticalAlignment = Alignment.CenterVertically
+                        .fillMaxHeight(0.4f)
                 ) {
-                    Column(
-                        horizontalAlignment = Alignment.CenterHorizontally,
-                        verticalArrangement = Arrangement.Center
+                    Row(
+                        Modifier
+                            .fillMaxSize(),
+                        horizontalArrangement = Arrangement.Center,
+                        verticalAlignment = Alignment.CenterVertically
                     ) {
-                        Text(text = mark, fontSize = 30.sp, color = backgroundLight)
-                        Text(text = model, fontSize = 26.sp, color = backgroundLight)
+                        Column(
+                            horizontalAlignment = Alignment.CenterHorizontally,
+                            verticalArrangement = Arrangement.Center
+                        ) {
+                            Text(text = mark, fontSize = 30.sp, color = backgroundLight)
+                            Text(text = model, fontSize = 26.sp, color = backgroundLight)
+                        }
+                    }
+                    // Кнопка удаления в правом верхнем углу
+                    if (userCarId != null && onDelete != null) {
+                        Button(
+                            onClick = onDelete,
+                            modifier = Modifier
+                                .align(Alignment.TopEnd)
+                                .padding(8.dp)
+                                .size(36.dp),
+                            shape = RoundedCornerShape(8.dp),
+                            colors = ButtonDefaults.buttonColors(
+                                containerColor = circleColor.fourthColor
+                            ),
+                            contentPadding = PaddingValues(0.dp)
+                        ) {
+                            Text(
+                                text = "×",
+                                color = textformLight,
+                                fontSize = 20.sp,
+                                fontWeight = FontWeight.Bold
+                            )
+                        }
                     }
                 }
 

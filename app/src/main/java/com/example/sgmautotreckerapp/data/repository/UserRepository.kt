@@ -19,6 +19,10 @@ class UserRepository @Inject constructor(
     // Получение пользователя по ID
     suspend fun getUserById(userId: Int): User? = userDao.getUserById(userId)
 
-    // Обновление пользователя (если добавите update в DAO)
-    // suspend fun updateUser(user: User) = userDao.update(user)
+    // Обновление имени пользователя
+    suspend fun updateUserName(userId: Int, userName: String) = userDao.updateUserName(userId, userName)
+
+    // Обновление пользователя
+    suspend fun updateUser(userId: Int, userName: String, phone: String, tgId: String) = 
+        userDao.updateUser(userId, userName, phone, tgId)
 }

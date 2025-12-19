@@ -25,4 +25,12 @@ interface UserDao {
     //Получение пользователя
     @Query("SELECT * FROM users WHERE id = :userId")
     suspend fun getUserById(userId: Int): User?
+
+    //Обновление имени пользователя
+    @Query("UPDATE users SET userName = :userName WHERE id = :userId")
+    suspend fun updateUserName(userId: Int, userName: String)
+
+    //Обновление пользователя
+    @Query("UPDATE users SET userName = :userName, phone = :phone, tgID = :tgId WHERE id = :userId")
+    suspend fun updateUser(userId: Int, userName: String, phone: String, tgId: String)
 }

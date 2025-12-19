@@ -81,7 +81,7 @@ fun AnalysisScreen(
             entry.value.sumOf { it.amount }
         }
     }
-    val totalAmount = totals.values.sum().takeIf { it > 0 } ?: 1.0
+    val totalAmount = totals.values.sum()
 
     MainContent(
         navController = navController,
@@ -120,6 +120,9 @@ fun AnalysisRing(
         circleColor.thirdColor,
         circleColor.fourthColor
     )
+    val displayAmount = totalAmount
+    val calculationAmount = totalAmount.takeIf { it > 0 } ?: 1.0
+    
     Box(
         modifier = Modifier.padding(top = 10.dp),
         contentAlignment = Alignment.Center
@@ -135,7 +138,7 @@ fun AnalysisRing(
             }
             var currentStartAngle = 0f
             totals.entries.forEachIndexed { index, entry ->
-                val sweep = ((entry.value / totalAmount) * 360f).toFloat()
+                val sweep = ((entry.value / calculationAmount) * 360f).toFloat()
                 drawArc(
                     color = colors[index % colors.size],
                     startAngle = currentStartAngle,
@@ -149,6 +152,22 @@ fun AnalysisRing(
         }
         if (totals.isEmpty()) {
             Text(text = "Расходов пока нет", color = fontLight)
+        } else {
+            Column(
+                horizontalAlignment = Alignment.CenterHorizontally
+            ) {
+                Text(
+                    text = "%.2f".format(displayAmount),
+                    color = fontLight,
+                    fontSize = 32.sp,
+                    fontWeight = FontWeight.Bold
+                )
+                Text(
+                    text = "₽",
+                    color = fontLight,
+                    fontSize = 24.sp
+                )
+            }
         }
     }
 }

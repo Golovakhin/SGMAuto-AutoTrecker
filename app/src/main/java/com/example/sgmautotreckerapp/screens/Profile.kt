@@ -163,7 +163,9 @@ public fun Text_Profile() {
 }
 
 @Composable
-public fun Button_Profile1() {
+public fun Button_Profile1(
+    onClick: () -> Unit = {}
+) {
     Spacer(Modifier.fillMaxHeight(0.05f))
     Row(
         modifier = Modifier
@@ -175,7 +177,8 @@ public fun Button_Profile1() {
             Modifier
                 .fillMaxHeight()
                 .fillMaxWidth(0.8f)
-                .background(color = mainLight, shape = RoundedCornerShape(25.dp)),
+                .background(color = mainLight, shape = RoundedCornerShape(25.dp))
+                .clickable(onClick = onClick),
         ) {
             Column(
                 modifier = Modifier
@@ -335,7 +338,15 @@ public fun Profile(
                 )
             },
             { Text_Profile() },
-            { Button_Profile1() },
+            { 
+                Button_Profile1(
+                    onClick = {
+                        userId?.let {
+                            navController?.navigate("settings/$it")
+                        }
+                    }
+                )
+            },
             { Button_Profile2() }
         )
     )
