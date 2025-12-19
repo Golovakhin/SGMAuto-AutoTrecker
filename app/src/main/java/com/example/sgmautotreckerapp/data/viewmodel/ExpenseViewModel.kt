@@ -5,11 +5,13 @@ import androidx.lifecycle.viewModelScope
 import com.example.sgmautotreckerapp.data.entity.Expense
 import com.example.sgmautotreckerapp.data.repository.ExpenseRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.Job
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
+import java.util.Calendar
 import javax.inject.Inject
 
 @HiltViewModel
@@ -32,8 +34,18 @@ class ExpenseViewModel @Inject constructor(
     private val _totalAmount = MutableStateFlow(0.0)
     val totalAmount: StateFlow<Double> = _totalAmount.asStateFlow()
 
+    private val _selectedYear = MutableStateFlow(Calendar.getInstance().get(Calendar.YEAR))
+    val selectedYear: StateFlow<Int> = _selectedYear.asStateFlow()
+
+    // 0..11
+    private val _selectedMonth = MutableStateFlow(Calendar.getInstance().get(Calendar.MONTH))
+    val selectedMonth: StateFlow<Int> = _selectedMonth.asStateFlow()
+
+    private var loadUserExpensesJob: Job? = null
+
     fun loadUserExpenses(userId: Int) {
-        viewModelScope.launch {
+        loadUserExpensesJob?.cancel()
+        loadUserExpensesJob = viewModelScope.launch {
             _state.value = ExpenseState.Loading
             try {
                 expenseRepository.getUserExpenses(userId).collectLatest { expenses ->
@@ -45,6 +57,52 @@ class ExpenseViewModel @Inject constructor(
                 _state.value = ExpenseState.Error("Ошибка загрузки расходов: ${e.message}")
             }
         }
+    }
+
+    fun loadUserExpensesForMonth(userId: Int, year: Int, month: Int) {
+        _selectedYear.value = year
+        _selectedMonth.value = month
+
+        val (fromMillis, toMillis) = monthRangeMillis(year, month)
+
+        loadUserExpensesJob?.cancel()
+        loadUserExpensesJob = viewModelScope.launch {
+            _state.value = ExpenseState.Loading
+            try {
+                expenseRepository.getUserExpensesBetween(userId, fromMillis, toMillis)
+                    .collectLatest { expenses ->
+                        _userExpenses.value = expenses
+                        calculateTotalAmount(expenses)
+                        _state.value = ExpenseState.Success
+                    }
+            } catch (e: Exception) {
+                _state.value = ExpenseState.Error("Ошибка загрузки расходов: ${e.message}")
+            }
+        }
+    }
+
+    fun shiftMonth(userId: Int, delta: Int) {
+        val cal = Calendar.getInstance().apply {
+            set(Calendar.YEAR, _selectedYear.value)
+            set(Calendar.MONTH, _selectedMonth.value)
+            set(Calendar.DAY_OF_MONTH, 1)
+        }
+        cal.add(Calendar.MONTH, delta)
+        loadUserExpensesForMonth(userId, cal.get(Calendar.YEAR), cal.get(Calendar.MONTH))
+    }
+
+    private fun monthRangeMillis(year: Int, month: Int): Pair<Long, Long> {
+        val from = Calendar.getInstance().apply {
+            set(Calendar.YEAR, year)
+            set(Calendar.MONTH, month)
+            set(Calendar.DAY_OF_MONTH, 1)
+            set(Calendar.HOUR_OF_DAY, 0)
+            set(Calendar.MINUTE, 0)
+            set(Calendar.SECOND, 0)
+            set(Calendar.MILLISECOND, 0)
+        }
+        val to = (from.clone() as Calendar).apply { add(Calendar.MONTH, 1) }
+        return from.timeInMillis to to.timeInMillis
     }
 
     fun loadCarExpenses(userCarId: Int) {

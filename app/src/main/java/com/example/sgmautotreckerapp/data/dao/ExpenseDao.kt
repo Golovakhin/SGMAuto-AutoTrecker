@@ -15,6 +15,17 @@ interface ExpenseDao {
     @Query("SELECT * FROM expenses WHERE userId = :userId ORDER BY date DESC")
     fun getUserExpenses(userId: Int): Flow<List<Expense>>
 
+    @Query(
+        "SELECT * FROM expenses " +
+            "WHERE userId = :userId AND date >= :fromMillis AND date < :toMillis " +
+            "ORDER BY date DESC"
+    )
+    fun getUserExpensesBetween(
+        userId: Int,
+        fromMillis: Long,
+        toMillis: Long
+    ): Flow<List<Expense>>
+
     @Query("SELECT * FROM expenses WHERE userCarId = :userCarId ORDER BY date DESC")
     fun getCarExpenses(userCarId: Int): Flow<List<Expense>>
 

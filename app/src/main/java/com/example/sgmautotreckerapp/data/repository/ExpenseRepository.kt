@@ -14,6 +14,12 @@ class ExpenseRepository @Inject constructor(
     // Получение всех расходов пользователя
     fun getUserExpenses(userId: Int): Flow<List<Expense>> = expenseDao.getUserExpenses(userId)
 
+    fun getUserExpensesBetween(
+        userId: Int,
+        fromMillis: Long,
+        toMillis: Long
+    ): Flow<List<Expense>> = expenseDao.getUserExpensesBetween(userId, fromMillis, toMillis)
+
     // Получение расходов по конкретному автомобилю
     fun getCarExpenses(userCarId: Int): Flow<List<Expense>> = expenseDao.getCarExpenses(userCarId)
 

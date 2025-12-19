@@ -54,7 +54,10 @@ import com.example.sgmautotreckerapp.ui.theme.backgroundLight
 import com.example.sgmautotreckerapp.ui.theme.circleColor
 import com.example.sgmautotreckerapp.ui.theme.fontLight
 import com.example.sgmautotreckerapp.ui.theme.mainLight
+import java.text.DateFormatSymbols
+import java.util.Calendar
 import java.util.Date
+import java.util.Locale
 import kotlinx.coroutines.launch
 
 @Composable
@@ -72,7 +75,9 @@ fun AnalysisScreen(
     val coroutineScope = rememberCoroutineScope()
 
     LaunchedEffect(userId) {
-        expenseViewModel.loadUserExpenses(userId)
+        // По умолчанию — текущий месяц
+        val now = Calendar.getInstance()
+        expenseViewModel.loadUserExpensesForMonth(userId, now.get(Calendar.YEAR), now.get(Calendar.MONTH))
         userCarViewModel.loadUserCars(userId)
     }
 
@@ -83,11 +88,22 @@ fun AnalysisScreen(
     }
     val totalAmount = totals.values.sum()
 
+    val selectedYear by expenseViewModel.selectedYear.collectAsState()
+    val selectedMonth by expenseViewModel.selectedMonth.collectAsState()
+
     MainContent(
         navController = navController,
         userId = userId,
         contentFunctions = listOf(
             { Info() },
+            {
+                MonthPager(
+                    year = selectedYear,
+                    month = selectedMonth,
+                    onPrev = { expenseViewModel.shiftMonth(userId, -1) },
+                    onNext = { expenseViewModel.shiftMonth(userId, 1) }
+                )
+            },
             { AnalysisRing(totals = totals, totalAmount = totalAmount) },
             { Legend(totals = totals) }
         )
@@ -98,7 +114,7 @@ fun AnalysisScreen(
 private fun Info() {
     Box(
         Modifier
-            .padding(top = 75.dp, start = 50.dp, end = 50.dp, bottom = 24.dp)
+            .padding(top = 75.dp, start = 50.dp, end = 50.dp, bottom = 16.dp)
             .clip(shape = RoundedCornerShape(30.dp))
             .background(color = advanceLight)
             .fillMaxWidth()
@@ -110,9 +126,63 @@ private fun Info() {
 }
 
 @Composable
+private fun MonthPager(
+    year: Int,
+    month: Int,
+    onPrev: () -> Unit,
+    onNext: () -> Unit
+) {
+    val monthName = remember(year, month) {
+        val name = DateFormatSymbols(Locale("ru")).months[month]
+        name.replaceFirstChar { if (it.isLowerCase()) it.titlecase(Locale("ru")) else it.toString() }
+    }
+
+    Row(
+        modifier = Modifier
+            .fillMaxWidth()
+            .padding(start = 50.dp, end = 50.dp, bottom = 16.dp),
+        horizontalArrangement = Arrangement.SpaceBetween,
+        verticalAlignment = Alignment.CenterVertically
+    ) {
+        Text(
+            text = "‹",
+            fontSize = 28.sp,
+            color = fontLight,
+            modifier = Modifier
+                .size(40.dp)
+                .clickable(onClick = onPrev)
+                .padding(top = 4.dp)
+        )
+
+        Text(
+            text = "$monthName $year",
+            fontSize = 18.sp,
+            fontWeight = FontWeight.Bold,
+            color = fontLight
+        )
+
+        Text(
+            text = "›",
+            fontSize = 28.sp,
+            color = fontLight,
+            modifier = Modifier
+                .size(40.dp)
+                .clickable(onClick = onNext)
+                .padding(top = 4.dp)
+        )
+    }
+}
+
+@Composable
 fun AnalysisRing(
     totals: Map<String, Double>,
-    totalAmount: Double
+    totalAmount: Double,
+    modifier: Modifier = Modifier.fillMaxWidth(),
+    ringSize: androidx.compose.ui.unit.Dp = 260.dp,
+    strokeWidth: androidx.compose.ui.unit.Dp = 15.dp,
+    topPadding: androidx.compose.ui.unit.Dp = 10.dp,
+    valueFontSize: androidx.compose.ui.unit.TextUnit = 32.sp,
+    currencyFontSize: androidx.compose.ui.unit.TextUnit = 24.sp
 ) {
     val colors = listOf(
         circleColor.firstColor,
@@ -122,17 +192,12 @@ fun AnalysisRing(
     )
     val displayAmount = totalAmount
     val calculationAmount = totalAmount.takeIf { it > 0 } ?: 1.0
-    
+
     Box(
-        modifier = Modifier.padding(top = 10.dp),
+        modifier = modifier.padding(top = topPadding),
         contentAlignment = Alignment.Center
     ) {
-        Canvas(
-            Modifier
-                .fillMaxWidth()
-                .fillMaxHeight(0.4f)
-                .padding(start = 75.dp, end = 75.dp)
-        ) {
+        Canvas(Modifier.size(ringSize)) {
             if (totals.isEmpty()) {
                 return@Canvas
             }
@@ -144,8 +209,8 @@ fun AnalysisRing(
                     startAngle = currentStartAngle,
                     sweepAngle = sweep,
                     useCenter = false,
-                    style = Stroke(width = 15.dp.toPx()),
-                    size = Size(size.width, size.width)
+                    style = Stroke(width = strokeWidth.toPx()),
+                    size = Size(size.minDimension, size.minDimension)
                 )
                 currentStartAngle += sweep
             }
@@ -153,19 +218,18 @@ fun AnalysisRing(
         if (totals.isEmpty()) {
             Text(text = "Расходов пока нет", color = fontLight)
         } else {
-            Column(
-                horizontalAlignment = Alignment.CenterHorizontally
-            ) {
+            Column(horizontalAlignment = Alignment.CenterHorizontally) {
+                // Без копеек в центре кольца
                 Text(
-                    text = "%.2f".format(displayAmount),
+                    text = displayAmount.toLong().toString(),
                     color = fontLight,
-                    fontSize = 32.sp,
+                    fontSize = valueFontSize,
                     fontWeight = FontWeight.Bold
                 )
                 Text(
                     text = "₽",
                     color = fontLight,
-                    fontSize = 24.sp
+                    fontSize = currencyFontSize
                 )
             }
         }

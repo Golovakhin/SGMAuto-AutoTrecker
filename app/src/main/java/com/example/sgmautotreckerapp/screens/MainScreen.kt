@@ -4,6 +4,7 @@ import android.graphics.fonts.FontStyle
 import androidx.compose.foundation.Canvas
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -20,6 +21,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.geometry.CornerRadius
@@ -31,7 +33,10 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import com.example.sgmautotreckerapp.Segment
 import com.example.sgmautotreckerapp.commonfunction.Background
 import com.example.sgmautotreckerapp.commonfunction.MainContent
+import com.example.sgmautotreckerapp.data.viewmodel.CarViewModel
 import com.example.sgmautotreckerapp.data.viewmodel.ExpenseViewModel
+import com.example.sgmautotreckerapp.data.viewmodel.UserCarViewModel
+import com.example.sgmautotreckerapp.navigation.AppRoutes
 import com.example.sgmautotreckerapp.ui.theme.advanceLight
 import com.example.sgmautotreckerapp.ui.theme.backgroundAdvanceLight
 import com.example.sgmautotreckerapp.ui.theme.backgroundLight
@@ -56,36 +61,66 @@ private fun AppBar (){
 }
 
 @Composable
-private fun CarMain() {
-    Column() {
+private fun CarMain(
+    userId: Int?,
+    navController: androidx.navigation.NavController? = null,
+    carViewModel: CarViewModel = hiltViewModel(),
+    userCarViewModel: UserCarViewModel = hiltViewModel()
+) {
+    val userCars by userCarViewModel.userCars.collectAsState()
+    val allCars by carViewModel.allCars.collectAsState()
+
+    val carsById = remember(allCars) { allCars.associateBy { it.id } }
+
+    LaunchedEffect(userId) {
+        userId?.let { userCarViewModel.loadUserCars(it) }
+        carViewModel.loadAllCars()
+    }
+
+    Column {
         Spacer(Modifier.fillMaxWidth().fillMaxHeight(0.05f))
 
-        Row(Modifier.fillMaxWidth().height(250.dp), horizontalArrangement = Arrangement.Center) {
-            Box(Modifier.background(fontLight, shape = RoundedCornerShape(25.dp)).fillMaxHeight().fillMaxWidth(0.8f))
-            {
-                Column() {
-                    Row() {
-                        Column(Modifier.fillMaxWidth().fillMaxHeight(0.3f).background(Color.Red), horizontalAlignment = Alignment.CenterHorizontally)
-                        {
-//                        Text(text = "Honda Civic", fontSize = 30.sp, color = backgroundLight, fontWeight = FontWeight.Normal)
-//                        Text(text = "Type R", fontSize = 30.sp, color = backgroundLight, fontWeight = FontWeight.Normal)
-                        }
-                    }
+        val userCar = userCars.firstOrNull()
+        val car = userCar?.let { carsById[it.carId] }
 
-                    Row() {
-                        Column(Modifier.fillMaxWidth(0.5f).fillMaxHeight().background(Color.Green), verticalArrangement = Arrangement.Center) {
-
-//                        Text(text = "Year: ", fontSize = 14.sp, color = backgroundLight, fontWeight = FontWeight.Normal)
-//                        Text(text = "Generation: ", fontSize = 14.sp, color = backgroundLight, fontWeight = FontWeight.Normal)
-//                        Text(text = "Number: ", fontSize = 14.sp, color = backgroundLight, fontWeight = FontWeight.Normal)
-                        }
-                        Column(Modifier.fillMaxSize().background(Color.Blue)) { }
-
-                    }
+        if (userCar == null) {
+            // Если авто еще нет — показываем карточку-подсказку
+            Row(
+                Modifier
+                    .fillMaxWidth()
+                    .padding(top = 24.dp),
+                horizontalArrangement = Arrangement.Center
+            ) {
+                Box(
+                    Modifier
+                        .fillMaxWidth(0.9f)
+                        .height(200.dp)
+                        .background(fontLight, shape = RoundedCornerShape(25.dp))
+                        .clickable(enabled = navController != null && userId != null) {
+                            userId?.let { navController?.navigate(AppRoutes.garageRoute(it)) }
+                        },
+                    contentAlignment = Alignment.Center
+                ) {
+                    Text(
+                        text = "Добавьте автомобиль",
+                        color = backgroundLight,
+                        fontSize = 20.sp,
+                        fontWeight = FontWeight.Medium
+                    )
                 }
-
             }
-
+        } else {
+            // Карточка автомобиля как в Garage, но без кнопки удаления
+            GarageCar(
+                mark = car?.mark ?: "Авто",
+                model = car?.model ?: "",
+                generation = car?.generation ?: "",
+                year = userCar.year,
+                gosNumber = userCar.gosNomer,
+                imageUrl = car?.imageURl,
+                userCarId = null,
+                onDelete = null
+            )
         }
     }
 }
@@ -94,6 +129,7 @@ private fun CarMain() {
 @Composable
 private fun Analitika(
     userId: Int?,
+    navController: androidx.navigation.NavController? = null,
     expenseViewModel: ExpenseViewModel = hiltViewModel()
 ){
     val expenses by expenseViewModel.userExpenses.collectAsState()
@@ -108,12 +144,16 @@ private fun Analitika(
     val totalAmount = totals.values.sum()
     Spacer(Modifier.fillMaxWidth().fillMaxHeight(0.05f))
 
-    Row(Modifier.fillMaxWidth().fillMaxHeight(0.25f), horizontalArrangement = Arrangement.Center) {
+    // Увеличили высоту блока аналитики, чтобы длинные категории помещались в легенду
+    Row(Modifier.fillMaxWidth().fillMaxHeight(0.32f), horizontalArrangement = Arrangement.Center) {
         Box(
             Modifier
                 .fillMaxWidth(0.8f)
                 .fillMaxHeight()
                 .background(mainLight, shape = RoundedCornerShape(25.dp))
+                .clickable(enabled = navController != null && userId != null) {
+                    userId?.let { navController?.navigate(AppRoutes.analysisRoute(it)) }
+                }
         ) {
             Row(
                 modifier = Modifier
@@ -127,30 +167,41 @@ private fun Analitika(
                     modifier = Modifier.weight(1f),
                     verticalArrangement = Arrangement.spacedBy(12.dp)
                 ) {
-                    val labels = listOf("Топливо", "Ремонт", "Мойка", "Прочее")
+                    // Легенда должна отражать реальные категории (expenseType), которые есть у пользователя
+                    val entries = totals.entries.toList()
                     val colors = listOf(
                         circleColor.firstColor,
                         circleColor.secondColor,
                         circleColor.thirdColor,
                         circleColor.fourthColor
                     )
-                    labels.forEachIndexed { index, label ->
-                        Row(
-                            verticalAlignment = Alignment.CenterVertically
-                        ) {
-                            Canvas(
-                                Modifier
-                                    .padding(end = 12.dp)
-                                    .height(10.dp)
-                                    .fillMaxWidth(0.05f)
-                            ) {
-                                drawCircle(color = colors[index % colors.size], radius = 4.dp.toPx())
+
+                    if (entries.isEmpty()) {
+                        Text(
+                            text = "Расходов пока нет",
+                            color = fontLight,
+                            fontSize = 16.sp
+                        )
+                    } else {
+                        entries.forEachIndexed { index, entry ->
+                            Row(verticalAlignment = Alignment.CenterVertically) {
+                                Canvas(
+                                    Modifier
+                                        .padding(end = 12.dp)
+                                        .height(10.dp)
+                                        .fillMaxWidth(0.05f)
+                                ) {
+                                    drawCircle(
+                                        color = colors[index % colors.size],
+                                        radius = 4.dp.toPx()
+                                    )
+                                }
+                                Text(
+                                    text = entry.key,
+                                    color = fontLight,
+                                    fontSize = 20.sp
+                                )
                             }
-                            Text(
-                                text = label,
-                                color = fontLight,
-                                fontSize = 20.sp
-                            )
                         }
                     }
                 }
@@ -160,10 +211,20 @@ private fun Analitika(
                     modifier = Modifier
                         .weight(1f)
                         .fillMaxHeight(),
-                    horizontalAlignment = Alignment.CenterHorizontally,
+                    horizontalAlignment = Alignment.End,
                     verticalArrangement = Arrangement.Center
                 ) {
-                    AnalysisRing(totals = totals, totalAmount = totalAmount)
+                    // На главном экране: смещаем вправо, центруем по вертикали и уменьшаем подпись суммы
+                    AnalysisRing(
+                        totals = totals,
+                        totalAmount = totalAmount,
+                        modifier = Modifier.align(Alignment.End),
+                        ringSize = 110.dp,
+                        strokeWidth = 10.dp,
+                        topPadding = 0.dp,
+                        valueFontSize = 14.sp,
+                        currencyFontSize = 10.sp
+                    )
                 }
             }
         }
@@ -276,8 +337,8 @@ public fun MainScreen(
         userId = userId,
         contentFunctions = listOf(
             { AppBar() },
-            { CarMain() },
-            { Analitika(userId = userId, expenseViewModel = expenseViewModel) },
+            { CarMain(userId = userId, navController = navController) },
+            { Analitika(userId = userId, navController = navController, expenseViewModel = expenseViewModel) },
             { AnotherBlocks() }
         )
     )
