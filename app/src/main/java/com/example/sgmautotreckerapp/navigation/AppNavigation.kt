@@ -15,6 +15,13 @@ import com.example.sgmautotreckerapp.screens.LoginScreen
 import com.example.sgmautotreckerapp.screens.MainScreen
 import com.example.sgmautotreckerapp.screens.Profile
 import com.example.sgmautotreckerapp.screens.RegistrationScreen
+import com.example.sgmautotreckerapp.screens.CategoryScreens.CarWashScreen
+import com.example.sgmautotreckerapp.screens.CategoryScreens.FinesTaxesScreen
+import com.example.sgmautotreckerapp.screens.CategoryScreens.FuelScreen
+import com.example.sgmautotreckerapp.screens.CategoryScreens.InsuranceScreen
+import com.example.sgmautotreckerapp.screens.CategoryScreens.OthersScreen
+import com.example.sgmautotreckerapp.screens.CategoryScreens.ParkingRoadScreen
+import com.example.sgmautotreckerapp.screens.CategoryScreens.ServiceScreen
 
 // Импортируем тестовый экран
 
@@ -27,7 +34,14 @@ object AppRoutes {
     const val GARAGE = "garage/{userId}"
     const val PROFILE = "profile/{userId}"
     const val ADD_CAR = "addCar/{userId}"
-    const val CATEGORY = "category"
+    const val CATEGORY = "category/{userId}"
+    const val CATEGORY_FUEL = "category_fuel/{userId}"
+    const val CATEGORY_SERVICE = "category_service/{userId}"
+    const val CATEGORY_PARKING_ROAD = "category_parking_road/{userId}"
+    const val CATEGORY_FINES_TAXES = "category_fines_taxes/{userId}"
+    const val CATEGORY_CAR_WASH = "category_car_wash/{userId}"
+    const val CATEGORY_INSURANCE = "category_insurance/{userId}"
+    const val CATEGORY_OTHERS = "category_others/{userId}"
     
     // Функции для создания маршрутов с параметрами
     fun mainRoute(userId: Int) = "main/$userId"
@@ -35,7 +49,14 @@ object AppRoutes {
     fun garageRoute(userId: Int) = "garage/$userId"
     fun profileRoute(userId: Int) = "profile/$userId"
     fun addCarRoute(userId: Int) = "addCar/$userId"
-    fun categoryRoute() = CATEGORY
+    fun categoryRoute(userId: Int) = "category/$userId"
+    fun categoryFuelRoute(userId: Int) = "category_fuel/$userId"
+    fun categoryServiceRoute(userId: Int) = "category_service/$userId"
+    fun categoryParkingRoadRoute(userId: Int) = "category_parking_road/$userId"
+    fun categoryFinesTaxesRoute(userId: Int) = "category_fines_taxes/$userId"
+    fun categoryCarWashRoute(userId: Int) = "category_car_wash/$userId"
+    fun categoryInsuranceRoute(userId: Int) = "category_insurance/$userId"
+    fun categoryOthersRoute(userId: Int) = "category_others/$userId"
 }
 
 @Composable
@@ -123,8 +144,63 @@ fun AppNavigation(
         }
 
         // Экран выбора категории расходов
-        composable(AppRoutes.CATEGORY) {
-            CategoryScreen()
+        composable(
+            route = AppRoutes.CATEGORY,
+            arguments = listOf(navArgument("userId") { type = NavType.IntType })
+        ) { backStackEntry ->
+            val userId = backStackEntry.arguments?.getInt("userId") ?: return@composable
+            CategoryScreen(navController = navController, userId = userId)
+        }
+
+        // Экраны форм по категориям расходов
+        composable(
+            route = AppRoutes.CATEGORY_FUEL,
+            arguments = listOf(navArgument("userId") { type = NavType.IntType })
+        ) { backStackEntry ->
+            val userId = backStackEntry.arguments?.getInt("userId") ?: return@composable
+            FuelScreen(navController = navController, userId = userId)
+        }
+        composable(
+            route = AppRoutes.CATEGORY_SERVICE,
+            arguments = listOf(navArgument("userId") { type = NavType.IntType })
+        ) { backStackEntry ->
+            val userId = backStackEntry.arguments?.getInt("userId") ?: return@composable
+            ServiceScreen(navController = navController, userId = userId)
+        }
+        composable(
+            route = AppRoutes.CATEGORY_PARKING_ROAD,
+            arguments = listOf(navArgument("userId") { type = NavType.IntType })
+        ) { backStackEntry ->
+            val userId = backStackEntry.arguments?.getInt("userId") ?: return@composable
+            ParkingRoadScreen(navController = navController, userId = userId)
+        }
+        composable(
+            route = AppRoutes.CATEGORY_FINES_TAXES,
+            arguments = listOf(navArgument("userId") { type = NavType.IntType })
+        ) { backStackEntry ->
+            val userId = backStackEntry.arguments?.getInt("userId") ?: return@composable
+            FinesTaxesScreen(navController = navController, userId = userId)
+        }
+        composable(
+            route = AppRoutes.CATEGORY_CAR_WASH,
+            arguments = listOf(navArgument("userId") { type = NavType.IntType })
+        ) { backStackEntry ->
+            val userId = backStackEntry.arguments?.getInt("userId") ?: return@composable
+            CarWashScreen(navController = navController, userId = userId)
+        }
+        composable(
+            route = AppRoutes.CATEGORY_INSURANCE,
+            arguments = listOf(navArgument("userId") { type = NavType.IntType })
+        ) { backStackEntry ->
+            val userId = backStackEntry.arguments?.getInt("userId") ?: return@composable
+            InsuranceScreen(navController = navController, userId = userId)
+        }
+        composable(
+            route = AppRoutes.CATEGORY_OTHERS,
+            arguments = listOf(navArgument("userId") { type = NavType.IntType })
+        ) { backStackEntry ->
+            val userId = backStackEntry.arguments?.getInt("userId") ?: return@composable
+            OthersScreen(navController = navController, userId = userId)
         }
     }
 }

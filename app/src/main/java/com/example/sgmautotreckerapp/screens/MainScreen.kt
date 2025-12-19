@@ -17,6 +17,9 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.geometry.CornerRadius
@@ -24,9 +27,11 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.hilt.navigation.compose.hiltViewModel
 import com.example.sgmautotreckerapp.Segment
 import com.example.sgmautotreckerapp.commonfunction.Background
 import com.example.sgmautotreckerapp.commonfunction.MainContent
+import com.example.sgmautotreckerapp.data.viewmodel.ExpenseViewModel
 import com.example.sgmautotreckerapp.ui.theme.advanceLight
 import com.example.sgmautotreckerapp.ui.theme.backgroundAdvanceLight
 import com.example.sgmautotreckerapp.ui.theme.backgroundLight
@@ -87,18 +92,78 @@ private fun CarMain() {
 
 
 @Composable
-private fun Analitika(){
+private fun Analitika(
+    userId: Int?,
+    expenseViewModel: ExpenseViewModel = hiltViewModel()
+){
+    val expenses by expenseViewModel.userExpenses.collectAsState()
+
+    LaunchedEffect(userId) {
+        userId?.let { expenseViewModel.loadUserExpenses(it) }
+    }
+
+    val totals = expenses.groupBy { it.expenseType }.mapValues { entry ->
+        entry.value.sumOf { it.amount }
+    }
+    val totalAmount = totals.values.sum().takeIf { it > 0 } ?: 1.0
     Spacer(Modifier.fillMaxWidth().fillMaxHeight(0.05f))
 
     Row(Modifier.fillMaxWidth().fillMaxHeight(0.25f), horizontalArrangement = Arrangement.Center) {
-        Box(Modifier.fillMaxWidth(0.8f).fillMaxHeight()){
-            Row() {
-                Column(Modifier.fillMaxWidth(0.5f).fillMaxHeight().background(mainLight, shape = RoundedCornerShape(topStart = 25.dp, bottomStart = 25.dp))) {
-
+        Box(
+            Modifier
+                .fillMaxWidth(0.8f)
+                .fillMaxHeight()
+                .background(mainLight, shape = RoundedCornerShape(25.dp))
+        ) {
+            Row(
+                modifier = Modifier
+                    .fillMaxSize()
+                    .padding(horizontal = 24.dp, vertical = 16.dp),
+                horizontalArrangement = Arrangement.SpaceBetween,
+                verticalAlignment = Alignment.CenterVertically
+            ) {
+                // Легенда слева
+                Column(
+                    modifier = Modifier.weight(1f),
+                    verticalArrangement = Arrangement.spacedBy(12.dp)
+                ) {
+                    val labels = listOf("Топливо", "Ремонт", "Мойка", "Прочее")
+                    val colors = listOf(
+                        circleColor.firstColor,
+                        circleColor.secondColor,
+                        circleColor.thirdColor,
+                        circleColor.fourthColor
+                    )
+                    labels.forEachIndexed { index, label ->
+                        Row(
+                            verticalAlignment = Alignment.CenterVertically
+                        ) {
+                            Canvas(
+                                Modifier
+                                    .padding(end = 12.dp)
+                                    .height(10.dp)
+                                    .fillMaxWidth(0.05f)
+                            ) {
+                                drawCircle(color = colors[index % colors.size], radius = 4.dp.toPx())
+                            }
+                            Text(
+                                text = label,
+                                color = fontLight,
+                                fontSize = 20.sp
+                            )
+                        }
+                    }
                 }
 
-                Column(Modifier.fillMaxWidth().fillMaxHeight().background(mainLight, shape = RoundedCornerShape(topEnd = 25.dp, bottomEnd = 25.dp))) {
-
+                // Кольцо справа
+                Column(
+                    modifier = Modifier
+                        .weight(1f)
+                        .fillMaxHeight(),
+                    horizontalAlignment = Alignment.CenterHorizontally,
+                    verticalArrangement = Arrangement.Center
+                ) {
+                    AnalysisRing(totals = totals, totalAmount = totalAmount)
                 }
             }
         }
@@ -203,7 +268,8 @@ private fun Legend(){
 @Composable
 public fun MainScreen(
     navController: androidx.navigation.NavController? = null,
-    userId: Int? = null
+    userId: Int? = null,
+    expenseViewModel: ExpenseViewModel = hiltViewModel()
 ){
     MainContent(
         navController = navController,
@@ -211,7 +277,7 @@ public fun MainScreen(
         contentFunctions = listOf(
             { AppBar() },
             { CarMain() },
-            { Analitika() },
+            { Analitika(userId = userId, expenseViewModel = expenseViewModel) },
             { AnotherBlocks() }
         )
     )

@@ -176,8 +176,8 @@ public fun MainContent(
         floatingActionButton = {
             LargeFloatingActionButton(
                 onClick = {
-                    if (navController != null) {
-                        navController.navigate(AppRoutes.CATEGORY)
+                    if (navController != null && userId != null) {
+                        navController.navigate(AppRoutes.categoryRoute(userId))
                     } else {
                         onAddClick?.invoke()
                     }

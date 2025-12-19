@@ -89,47 +89,9 @@ fun AnalysisScreen(
         contentFunctions = listOf(
             { Info() },
             { AnalysisRing(totals = totals, totalAmount = totalAmount) },
-            { Legend(totals = totals) },
-            {
-                Spacer(Modifier.height(12.dp))
-                Button(
-                    onClick = { showAddDialog = true },
-                    colors = ButtonDefaults.buttonColors(mainLight),
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .padding(horizontal = 24.dp)
-                ) { Text("Добавить расход", color = backgroundLight) }
-                if (localError != null) {
-                    Text(
-                        text = localError!!,
-                        color = mainLight,
-                        modifier = Modifier
-                            .padding(top = 6.dp, start = 24.dp, end = 24.dp)
-                    )
-                }
-            }
+            { Legend(totals = totals) }
         )
     )
-
-    if (showAddDialog) {
-        AddExpenseDialog(
-            userId = userId,
-            userCars = userCars,
-            onDismiss = { showAddDialog = false },
-            onSave = { expense ->
-                coroutineScope.launch {
-                    try {
-                        expenseViewModel.addExpense(expense)
-                        expenseViewModel.loadUserExpenses(userId)
-                        showAddDialog = false
-                        localError = null
-                    } catch (e: Exception) {
-                        localError = e.message
-                    }
-                }
-            }
-        )
-    }
 }
 
 @Composable
@@ -148,7 +110,10 @@ private fun Info() {
 }
 
 @Composable
-private fun AnalysisRing(totals: Map<String, Double>, totalAmount: Double) {
+fun AnalysisRing(
+    totals: Map<String, Double>,
+    totalAmount: Double
+) {
     val colors = listOf(
         circleColor.firstColor,
         circleColor.secondColor,
@@ -214,20 +179,29 @@ private fun Legend(totals: Map<String, Double>) {
                 modifier = Modifier.padding(16.dp)
             )
         } else {
-            Row {
-                Column(Modifier.padding(top = 30.dp), verticalArrangement = Arrangement.Top) {
-                    items.forEachIndexed { index, _ ->
-                        Canvas(Modifier.fillMaxWidth(0.15f)) {
-                            drawCircle(color = colors[index % colors.size], radius = 4.dp.toPx())
-                        }
-                        Spacer(Modifier.height(30.dp))
-                    }
-                }
-
-                Column(Modifier.padding(top = 22.dp)) {
-                    items.forEachIndexed { index, entry ->
-                        Text(text = "${entry.key}: ${"%.2f ₽".format(entry.value)}", color = fontLight)
-                        Spacer(Modifier.height(14.dp))
+            Column(Modifier.padding(top = 30.dp, start = 16.dp, end = 16.dp, bottom = 16.dp)) {
+                items.forEachIndexed { index, entry ->
+                    Row(
+                        verticalAlignment = Alignment.CenterVertically,
+                        modifier = Modifier.padding(vertical = 8.dp)
+                    ) {
+                        Canvas(
+                            Modifier
+                                .size(8.dp)
+                                .padding(end = 12.dp),
+                            onDraw = {
+                                drawCircle(
+                                    color = colors[index % colors.size],
+                                    radius = 4.dp.toPx(),
+                                    center = center
+                                )
+                            }
+                        )
+                        Text(
+                            text = "${entry.key}: ${"%.2f ₽".format(entry.value)}",
+                            color = fontLight,
+                            modifier = Modifier.weight(1f)
+                        )
                     }
                 }
             }
