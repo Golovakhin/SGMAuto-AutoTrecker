@@ -21,4 +21,8 @@ interface UserCarDao {
 
     @Query("DELETE FROM user_cars WHERE id = :userCarId")
     suspend fun deleteUserCar(userCarId: Int)
+
+    // Получить все машины пользователей (для синхронизации)
+    @Query("SELECT * FROM user_cars")
+    suspend fun getAllUserCars(): List<UserCar>
 }

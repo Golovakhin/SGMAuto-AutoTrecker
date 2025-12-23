@@ -33,4 +33,8 @@ interface UserDao {
     //Обновление пользователя
     @Query("UPDATE users SET userName = :userName, phone = :phone, tgID = :tgId WHERE id = :userId")
     suspend fun updateUser(userId: Int, userName: String, phone: String, tgId: String)
+
+    // Получить всех пользователей (для синхронизации)
+    @Query("SELECT * FROM users")
+    suspend fun getAllUsers(): List<User>
 }

@@ -124,7 +124,6 @@ class ExpenseViewModel @Inject constructor(
         return try {
             val id = expenseRepository.addExpense(expense)
 
-            // Обновляем список расходов
             if (expense.userCarId != 0) {
                 loadCarExpenses(expense.userCarId)
             } else {
