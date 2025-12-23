@@ -1,4 +1,4 @@
-package com.example.sgmautotreckerapp.screens
+﻿package com.example.sgmautotreckerapp.screens
 
 import androidx.compose.foundation.Canvas
 import androidx.compose.foundation.background
@@ -75,7 +75,6 @@ fun AnalysisScreen(
     val coroutineScope = rememberCoroutineScope()
 
     LaunchedEffect(userId) {
-        // По умолчанию — текущий месяц
         val now = Calendar.getInstance()
         expenseViewModel.loadUserExpensesForMonth(userId, now.get(Calendar.YEAR), now.get(Calendar.MONTH))
         userCarViewModel.loadUserCars(userId)
@@ -219,7 +218,6 @@ fun AnalysisRing(
             Text(text = "Расходов пока нет", color = fontLight)
         } else {
             Column(horizontalAlignment = Alignment.CenterHorizontally) {
-                // Без копеек в центре кольца
                 Text(
                     text = displayAmount.toLong().toString(),
                     color = fontLight,

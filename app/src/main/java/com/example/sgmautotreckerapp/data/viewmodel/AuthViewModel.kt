@@ -1,4 +1,4 @@
-package com.example.sgmautotreckerapp.data.viewmodel
+﻿package com.example.sgmautotreckerapp.data.viewmodel
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
@@ -36,16 +36,14 @@ class AuthViewModel @Inject constructor(
             _registrationState.value = RegistrationState.Loading
 
             try {
-                // Проверяем, существует ли email
                 if (userRepository.isEmailExists(email)) {
                     _registrationState.value = RegistrationState.Error("Email уже зарегистрирован")
                     return@launch
                 }
 
-                // Создаем нового пользователя
                 val user = User(
                     email = email,
-                    password = password, // В реальном приложении нужно хэшировать!
+                    password = password,
                     userName = name,
                     phone = phone,
                     tgID = tgId
@@ -72,7 +70,6 @@ class AuthViewModel @Inject constructor(
                     return@launch
                 }
 
-                // В реальном приложении используйте безопасное сравнение хэшей!
                 if (user.password != password) {
                     _loginState.value = LoginState.Error("Неверный пароль")
                     return@launch
@@ -110,11 +107,9 @@ class AuthViewModel @Inject constructor(
         viewModelScope.launch {
             try {
                 userRepository.updateUserName(userId, userName)
-                // Обновляем текущего пользователя
                 val user = userRepository.getUserById(userId)
                 _currentUser.value = user
             } catch (e: Exception) {
-                // Обработка ошибки
             }
         }
     }

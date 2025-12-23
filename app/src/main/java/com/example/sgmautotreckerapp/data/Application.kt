@@ -1,4 +1,4 @@
-package com.example.sgmautotreckerapp.data
+﻿package com.example.sgmautotreckerapp.data
 
 import android.app.Application
 import com.example.sgmautotreckerapp.data.database.CarDatabase

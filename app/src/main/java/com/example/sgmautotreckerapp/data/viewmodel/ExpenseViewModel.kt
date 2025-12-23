@@ -1,4 +1,4 @@
-package com.example.sgmautotreckerapp.data.viewmodel
+﻿package com.example.sgmautotreckerapp.data.viewmodel
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
@@ -37,7 +37,6 @@ class ExpenseViewModel @Inject constructor(
     private val _selectedYear = MutableStateFlow(Calendar.getInstance().get(Calendar.YEAR))
     val selectedYear: StateFlow<Int> = _selectedYear.asStateFlow()
 
-    // 0..11
     private val _selectedMonth = MutableStateFlow(Calendar.getInstance().get(Calendar.MONTH))
     val selectedMonth: StateFlow<Int> = _selectedMonth.asStateFlow()
 
@@ -150,8 +149,6 @@ class ExpenseViewModel @Inject constructor(
     }
 
     fun getExpensesForPeriod(startDate: String, endDate: String): List<Expense> {
-        // Здесь можно реализовать фильтрацию по дате
-        // Для упрощения возвращаем все расходы
         return when {
             _carExpenses.value.isNotEmpty() -> _carExpenses.value
             _userExpenses.value.isNotEmpty() -> _userExpenses.value

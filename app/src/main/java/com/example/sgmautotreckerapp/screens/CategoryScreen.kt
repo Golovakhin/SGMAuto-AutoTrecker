@@ -1,4 +1,4 @@
-package com.example.sgmautotreckerapp.screens
+﻿package com.example.sgmautotreckerapp.screens
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
@@ -137,7 +137,6 @@ private fun CategoriesGrid(navController: NavController?, userId: Int) {
         horizontalAlignment = Alignment.CenterHorizontally,
         verticalArrangement = Arrangement.spacedBy(24.dp)
     ) {
-        // 1 ряд
         Row(
             horizontalArrangement = Arrangement.spacedBy(24.dp),
             modifier = Modifier.fillMaxWidth(0.8f),
@@ -161,7 +160,6 @@ private fun CategoriesGrid(navController: NavController?, userId: Int) {
             )
         }
 
-        // 2 ряд
         Row(
             horizontalArrangement = Arrangement.spacedBy(24.dp),
             modifier = Modifier.fillMaxWidth(0.8f),
@@ -187,7 +185,6 @@ private fun CategoriesGrid(navController: NavController?, userId: Int) {
             )
         }
 
-        // 3 ряд
         Row(
             horizontalArrangement = Arrangement.spacedBy(24.dp),
             modifier = Modifier.fillMaxWidth(0.8f),
@@ -211,7 +208,6 @@ private fun CategoriesGrid(navController: NavController?, userId: Int) {
             )
         }
 
-        // 4 ряд — одна карта по центру
         Row(
             modifier = Modifier
                 .fillMaxWidth(0.8f)

@@ -1,4 +1,4 @@
-package com.example.sgmautotreckerapp
+﻿package com.example.sgmautotreckerapp
 
 import androidx.compose.ui.graphics.Color
 

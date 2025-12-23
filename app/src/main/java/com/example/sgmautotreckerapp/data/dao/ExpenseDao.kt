@@ -1,4 +1,4 @@
-package com.example.sgmautotreckerapp.data.dao
+﻿package com.example.sgmautotreckerapp.data.dao
 
 import androidx.room.Dao
 import androidx.room.Insert
@@ -32,7 +32,6 @@ interface ExpenseDao {
     @Query("DELETE FROM expenses WHERE userCarId = :userCarId")
     suspend fun deleteExpensesByUserCarId(userCarId: Int)
 
-    // Получить все расходы (для синхронизации)
     @Query("SELECT * FROM expenses")
     suspend fun getAllExpenses(): List<Expense>
 }

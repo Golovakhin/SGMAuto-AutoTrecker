@@ -1,4 +1,4 @@
-package com.example.sgmautotreckerapp.commonfunction
+﻿package com.example.sgmautotreckerapp.commonfunction
 
 import androidx.compose.foundation.Canvas
 import androidx.compose.foundation.Image
@@ -61,7 +61,6 @@ public fun MainContent(
                     Modifier.background(color = advanceLight).fillMaxSize(),
                     verticalAlignment = Alignment.Top
                 ) {
-                    // Первая иконка - Главная (Home) - ведет на MainScreen
                     Box(
                         Modifier
                             .weight(1f)
@@ -81,7 +80,6 @@ public fun MainContent(
                         )
                     }
                     
-                    // Вторая иконка - Статистика (Analysis)
                     Box(
                         Modifier
                             .weight(1f)
@@ -101,7 +99,6 @@ public fun MainContent(
                         )
                     }
                     
-                    // Центральное место для кнопки "+"
                     Box(
                         Modifier
                             .fillMaxHeight()
@@ -118,7 +115,6 @@ public fun MainContent(
                         }
                     }
                     
-                    // Третья иконка - Машинка (Garage)
                     Box(
                         Modifier
                             .weight(1f)
@@ -138,22 +134,17 @@ public fun MainContent(
                         )
                     }
                     
-                    // Четвертая иконка - Профиль (если залогинен) или Вход (если нет)
                     Box(
                         Modifier
                             .weight(1f)
                             .fillMaxHeight()
                             .clickable(enabled = navController != null) {
                                 if (userId != null) {
-                                    // Если залогинен - переходим в профиль
                                     navController?.navigate("profile/$userId") {
-                                        // Сохраняем историю навигации
                                         launchSingleTop = true
                                     }
                                 } else {
-                                    // Если не залогинен - переходим на экран входа
                                     navController?.navigate("login") {
-                                        // Очищаем весь стек навигации
                                         popUpTo(0) { inclusive = true }
                                     }
                                 }

@@ -1,4 +1,4 @@
-package com.example.sgmautotreckerapp.data.viewmodel
+﻿package com.example.sgmautotreckerapp.data.viewmodel
 
 
 import androidx.lifecycle.ViewModel
@@ -70,11 +70,8 @@ class UserCarViewModel @Inject constructor(
         viewModelScope.launch {
             _state.value = UserCarState.Loading
             try {
-                // Сначала удаляем связанные расходы
                 expenseRepository.deleteExpensesByUserCarId(userCarId)
-                // Затем удаляем автомобиль пользователя
                 userCarRepository.deleteUserCar(userCarId)
-                // Обновляем список автомобилей
                 loadUserCars(userId)
                 _state.value = UserCarState.Success
             } catch (e: Exception) {

@@ -1,4 +1,4 @@
-package com.example.sgmautotreckerapp.navigation
+﻿package com.example.sgmautotreckerapp.navigation
 
 import androidx.compose.runtime.Composable
 import androidx.navigation.NavHostController
@@ -24,9 +24,7 @@ import com.example.sgmautotreckerapp.screens.CategoryScreens.OthersScreen
 import com.example.sgmautotreckerapp.screens.CategoryScreens.ParkingRoadScreen
 import com.example.sgmautotreckerapp.screens.CategoryScreens.ServiceScreen
 
-// Импортируем тестовый экран
 
-// Объект с названиями маршрутов
 object AppRoutes {
     const val LOGIN = "login"
     const val REGISTER = "register"
@@ -45,7 +43,6 @@ object AppRoutes {
     const val CATEGORY_OTHERS = "category_others/{userId}"
     const val SETTINGS = "settings/{userId}"
     
-    // Функции для создания маршрутов с параметрами
     fun mainRoute(userId: Int) = "main/$userId"
     fun analysisRoute(userId: Int) = "analysis/$userId"
     fun garageRoute(userId: Int) = "garage/$userId"
@@ -71,17 +68,14 @@ fun AppNavigation(
         navController = navController,
         startDestination = startDestination
     ) {
-        // Экран входа
         composable(AppRoutes.LOGIN) {
             LoginScreen(navController = navController)
         }
         
-        // Экран регистрации
         composable(AppRoutes.REGISTER) {
             RegistrationScreen(navController = navController)
         }
         
-        // Главный экран (SGM-Auto)
         composable(
             route = AppRoutes.MAIN,
             arguments = listOf(navArgument("userId") { type = NavType.IntType })
@@ -90,7 +84,6 @@ fun AppNavigation(
             MainScreen(navController = navController, userId = userId)
         }
         
-        // Экран статистики (Analysis)
         composable(
             route = AppRoutes.ANALYSIS,
             arguments = listOf(navArgument("userId") { type = NavType.IntType })
@@ -102,7 +95,6 @@ fun AppNavigation(
             )
         }
         
-        // Экран гаража
         composable(
             route = AppRoutes.GARAGE,
             arguments = listOf(navArgument("userId") { type = NavType.IntType })
@@ -114,7 +106,6 @@ fun AppNavigation(
             )
         }
         
-        // Экран профиля с userId
         composable(
             route = "profile/{userId}",
             arguments = listOf(navArgument("userId") { type = NavType.IntType })
@@ -126,7 +117,6 @@ fun AppNavigation(
             )
         }
         
-        // Экран профиля без userId (для навигации без авторизации)
         composable("profile") {
             Profile(
                 navController = navController,
@@ -134,7 +124,6 @@ fun AppNavigation(
             )
         }
         
-        // Экран добавления машины
         composable(
             route = AppRoutes.ADD_CAR,
             arguments = listOf(navArgument("userId") { type = NavType.IntType })
@@ -146,7 +135,6 @@ fun AppNavigation(
             )
         }
 
-        // Экран выбора категории расходов
         composable(
             route = AppRoutes.CATEGORY,
             arguments = listOf(navArgument("userId") { type = NavType.IntType })
@@ -155,7 +143,6 @@ fun AppNavigation(
             CategoryScreen(navController = navController, userId = userId)
         }
 
-        // Экраны форм по категориям расходов
         composable(
             route = AppRoutes.CATEGORY_FUEL,
             arguments = listOf(navArgument("userId") { type = NavType.IntType })
@@ -206,7 +193,6 @@ fun AppNavigation(
             OthersScreen(navController = navController, userId = userId)
         }
 
-        // Экран настроек
         composable(
             route = AppRoutes.SETTINGS,
             arguments = listOf(navArgument("userId") { type = NavType.IntType })

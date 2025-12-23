@@ -1,4 +1,4 @@
-package com.example.sgmautotreckerapp.screens.CategoryScreens
+﻿package com.example.sgmautotreckerapp.screens.CategoryScreens
 
 import android.app.DatePickerDialog
 import androidx.compose.foundation.Image
@@ -84,7 +84,6 @@ private fun ParkingRoadBlocks(navController: NavController?) {
             )
         }
 
-        //Spacer(Modifier.width(10.dp))
 
         Column(Modifier.fillMaxWidth(0.9f).fillMaxHeight(), verticalArrangement = Arrangement.Top) {
             Box(Modifier.align(Alignment.CenterHorizontally)){
@@ -131,7 +130,6 @@ private fun ContentParkingRoad(
                 )
             }
 
-            //Дата траты
             Row(Modifier.padding(top = 10.dp)) {
                 Text(
                     text = "Выберите дату",
@@ -178,7 +176,6 @@ private fun ContentParkingRoad(
             }
 
 
-            //Сумма траты
             Row(Modifier.padding(top = 20.dp)) {
                 Text(
                     text = "Сумма траты",

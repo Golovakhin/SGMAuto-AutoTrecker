@@ -1,4 +1,4 @@
-package com.example.sgmautotreckerapp.screens
+﻿package com.example.sgmautotreckerapp.screens
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
@@ -82,7 +82,6 @@ fun AddCarScreen(
     var brandExpanded by remember { mutableStateOf(false) }
     var modelExpanded by remember { mutableStateOf(false) }
 
-    // Загружаем данные при открытии экрана
     LaunchedEffect(Unit) {
         kotlinx.coroutines.delay(200)
         carViewModel.loadAllBrands()
@@ -122,7 +121,6 @@ fun AddCarScreen(
                 ),
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
-        // Header
         Row(
             Modifier
                 .fillMaxWidth()
@@ -142,14 +140,12 @@ fun AddCarScreen(
 
         Spacer(Modifier.height(24.dp))
 
-        // Форма
         Column(
             Modifier
                 .fillMaxWidth()
                 .weight(1f),
             verticalArrangement = Arrangement.spacedBy(16.dp)
         ) {
-            // Выбор марки
             Column {
                 Text(
                     text = "Марка",
@@ -213,7 +209,6 @@ fun AddCarScreen(
                 }
             }
 
-            // Выбор модели
             if (selectedBrand.isNotBlank()) {
                 Column {
                     Text(
@@ -285,7 +280,6 @@ fun AddCarScreen(
                 }
             }
 
-            // Госномер
             OutlinedTextField(
                 value = gosNomer,
                 onValueChange = { gosNomer = it },
@@ -306,7 +300,6 @@ fun AddCarScreen(
                 shape = RoundedCornerShape(15.dp)
             )
 
-            // VIN
             OutlinedTextField(
                 value = vin,
                 onValueChange = { vin = it },
@@ -327,7 +320,6 @@ fun AddCarScreen(
                 shape = RoundedCornerShape(15.dp)
             )
 
-            // Год выпуска
             OutlinedTextField(
                 value = year,
                 onValueChange = { year = it.filter { ch -> ch.isDigit() } },
@@ -360,7 +352,6 @@ fun AddCarScreen(
 
         Spacer(Modifier.height(16.dp))
 
-        // Кнопки
         Row(
             Modifier.fillMaxWidth(),
             horizontalArrangement = Arrangement.spacedBy(12.dp)

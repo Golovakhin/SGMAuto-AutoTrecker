@@ -1,4 +1,4 @@
-package com.example.sgmautotreckerapp.data.preferences
+﻿package com.example.sgmautotreckerapp.data.preferences
 
 import android.content.Context
 import android.content.SharedPreferences

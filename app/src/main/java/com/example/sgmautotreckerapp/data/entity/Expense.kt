@@ -1,4 +1,4 @@
-package com.example.sgmautotreckerapp.data.entity
+﻿package com.example.sgmautotreckerapp.data.entity
 
 import androidx.room.Entity
 import androidx.room.ForeignKey

@@ -1,4 +1,4 @@
-package com.example.sgmautotreckerapp.screens
+﻿package com.example.sgmautotreckerapp.screens
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
@@ -75,14 +75,12 @@ public fun Info_Profile(
             modifier = Modifier
                 .fillMaxWidth(0.9f)
         ) {
-            // Карточка аватара с кнопкой выхода
             Box(
                 modifier = Modifier
                     .fillMaxWidth()
                     .height(220.dp)
                     .background(color = fontLight, shape = RoundedCornerShape(25.dp))
             ) {
-                // Кнопка выхода справа сверху
                 Row(
                     Modifier
                         .fillMaxWidth()
@@ -99,7 +97,6 @@ public fun Info_Profile(
                     )
                 }
 
-                // Центральный контент: аватар, имя и почта строго друг под другом
                 Column(
                     modifier = Modifier
                         .fillMaxSize(),

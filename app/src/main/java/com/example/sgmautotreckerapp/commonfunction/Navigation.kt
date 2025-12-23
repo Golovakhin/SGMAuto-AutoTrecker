@@ -1,4 +1,4 @@
-package com.example.sgmautotreckerapp.commonfunction
+﻿package com.example.sgmautotreckerapp.commonfunction
 
 import android.icu.number.Scale
 import androidx.compose.foundation.Canvas

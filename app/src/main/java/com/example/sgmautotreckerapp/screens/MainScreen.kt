@@ -1,4 +1,4 @@
-package com.example.sgmautotreckerapp.screens
+﻿package com.example.sgmautotreckerapp.screens
 
 import android.graphics.fonts.FontStyle
 import androidx.compose.foundation.Canvas
@@ -84,7 +84,6 @@ private fun CarMain(
         val car = userCar?.let { carsById[it.carId] }
 
         if (userCar == null) {
-            // Если авто еще нет — показываем карточку-подсказку
             Row(
                 Modifier
                     .fillMaxWidth()
@@ -110,7 +109,6 @@ private fun CarMain(
                 }
             }
         } else {
-            // Карточка автомобиля как в Garage, но без кнопки удаления
             GarageCar(
                 mark = car?.mark ?: "Авто",
                 model = car?.model ?: "",
@@ -144,7 +142,6 @@ private fun Analitika(
     val totalAmount = totals.values.sum()
     Spacer(Modifier.fillMaxWidth().fillMaxHeight(0.05f))
 
-    // Увеличили высоту блока аналитики, чтобы длинные категории помещались в легенду
     Row(Modifier.fillMaxWidth().fillMaxHeight(0.32f), horizontalArrangement = Arrangement.Center) {
         Box(
             Modifier
@@ -162,12 +159,10 @@ private fun Analitika(
                 horizontalArrangement = Arrangement.SpaceBetween,
                 verticalAlignment = Alignment.CenterVertically
             ) {
-                // Легенда слева
                 Column(
                     modifier = Modifier.weight(1f),
                     verticalArrangement = Arrangement.spacedBy(12.dp)
                 ) {
-                    // Легенда должна отражать реальные категории (expenseType), которые есть у пользователя
                     val entries = totals.entries.toList()
                     val colors = listOf(
                         circleColor.firstColor,
@@ -206,7 +201,6 @@ private fun Analitika(
                     }
                 }
 
-                // Кольцо справа
                 Column(
                     modifier = Modifier
                         .weight(1f)
@@ -214,7 +208,6 @@ private fun Analitika(
                     horizontalAlignment = Alignment.End,
                     verticalArrangement = Arrangement.Center
                 ) {
-                    // На главном экране: смещаем вправо, центруем по вертикали и уменьшаем подпись суммы
                     AnalysisRing(
                         totals = totals,
                         totalAmount = totalAmount,

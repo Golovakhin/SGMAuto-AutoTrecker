@@ -1,4 +1,4 @@
-package com.example.sgmautotreckerapp
+﻿package com.example.sgmautotreckerapp
 
 import android.os.Bundle
 import androidx.activity.ComponentActivity
@@ -24,7 +24,6 @@ class MainActivity : ComponentActivity() {
             val isDarkTheme = remember { mutableStateOf(themePreferences.isDarkTheme()) }
             
             SGMAutoTreckerAppTheme(darkTheme = isDarkTheme.value) {
-                // Запускаем навигацию
                 AppNavigation(
                     onThemeChange = { isDark ->
                         isDarkTheme.value = isDark

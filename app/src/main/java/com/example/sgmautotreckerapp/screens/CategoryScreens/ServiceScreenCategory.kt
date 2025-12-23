@@ -1,4 +1,4 @@
-package com.example.sgmautotreckerapp.screens.CategoryScreens
+﻿package com.example.sgmautotreckerapp.screens.CategoryScreens
 
 import android.app.DatePickerDialog
 import android.net.Uri
@@ -132,7 +132,6 @@ private fun ContentService(
                 )
             }
 
-            //Дата траты
             Row(Modifier.padding(top = 10.dp)) {
                 Text(text = "Выберите дату", fontSize = 20.sp, color = fontLight, fontWeight = FontWeight.SemiBold)
             }
@@ -164,7 +163,6 @@ private fun ContentService(
 
 
 
-            //Сумма траты
             Row(Modifier.padding(top = 20.dp)) {
                 Text(text = "Сумма траты", fontSize = 20.sp, color = fontLight, fontWeight = FontWeight.SemiBold)
             }
@@ -182,7 +180,6 @@ private fun ContentService(
                 )
             }
 
-            //пробег
             Row(Modifier.padding(top = 20.dp)) {
                 Text(text = "Укажите пробег", fontSize = 20.sp, color = fontLight, fontWeight = FontWeight.SemiBold)
             }
@@ -200,7 +197,6 @@ private fun ContentService(
                 )
             }
 
-            //комментарий
             Row(Modifier.padding(top = 20.dp)) {
                 Text(text = "Укажите комментарий", fontSize = 20.sp, color = fontLight, fontWeight = FontWeight.SemiBold)
             }

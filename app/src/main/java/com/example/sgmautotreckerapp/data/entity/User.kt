@@ -1,4 +1,4 @@
-package com.example.sgmautotreckerapp.data.entity
+﻿package com.example.sgmautotreckerapp.data.entity
 
 import androidx.room.Entity
 import androidx.room.Index
@@ -18,5 +18,4 @@ data class User(
     val userName: String,
     val phone: String,
     val tgID : String
-    // узнать про фото
 )

@@ -1,4 +1,4 @@
-package com.example.sgmautotreckerapp.screens.CategoryScreens
+﻿package com.example.sgmautotreckerapp.screens.CategoryScreens
 
 import android.app.DatePickerDialog
 import android.net.Uri
@@ -85,7 +85,6 @@ private fun FinesTaxesText(navController: NavController?) {
             )
         }
 
-        //Spacer(Modifier.width(10.dp))
 
         Column(Modifier.fillMaxWidth(0.9f).fillMaxHeight()) {
             Box(Modifier.align(Alignment.CenterHorizontally)){
@@ -136,7 +135,6 @@ private fun FinesTaxesForms(
                 )
             }
 
-            //Дата траты
             Row(Modifier.padding(top = 10.dp)) {
                 Text(
                     text = "Выберите дату",
@@ -183,7 +181,6 @@ private fun FinesTaxesForms(
             }
 
 
-            //Сумма траты
             Row(Modifier.padding(top = 20.dp)) {
                 Text(
                     text = "Сумма траты",

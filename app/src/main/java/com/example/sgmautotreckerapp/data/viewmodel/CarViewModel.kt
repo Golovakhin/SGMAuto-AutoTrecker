@@ -1,4 +1,4 @@
-package com.example.sgmautotreckerapp.data.viewmodel
+﻿package com.example.sgmautotreckerapp.data.viewmodel
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
@@ -58,7 +58,6 @@ class CarViewModel @Inject constructor(
                     _allBrands.value = brands
                 }
             } catch (e: Exception) {
-                // Если произошла ошибка, пробуем загрузить еще раз через небольшую задержку
                 kotlinx.coroutines.delay(500)
                 carRepository.getAllBrands().collectLatest { brands ->
                     _allBrands.value = brands

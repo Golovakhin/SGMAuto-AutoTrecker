@@ -1,4 +1,4 @@
-package com.example.sgmautotreckerapp.screens
+﻿package com.example.sgmautotreckerapp.screens
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
@@ -137,7 +137,6 @@ private fun SettingsContent(
             .padding(horizontal = 20.dp),
         verticalArrangement = Arrangement.spacedBy(20.dp)
     ) {
-        // Изменение имени
         Box(
             modifier = Modifier
                 .fillMaxWidth()
@@ -193,7 +192,6 @@ private fun SettingsContent(
             }
         }
 
-        // Переключение темы
         Box(
             modifier = Modifier
                 .fillMaxWidth()
@@ -234,7 +232,6 @@ private fun SettingsContent(
             }
         }
 
-        // Изменение аватарки
         Box(
             modifier = Modifier
                 .fillMaxWidth()
@@ -261,7 +258,6 @@ private fun SettingsContent(
                             shape = RoundedCornerShape(25.dp)
                         )
                         .clickable {
-                            // TODO: Реализовать выбор изображения
                         },
                     contentAlignment = Alignment.Center
                 ) {
@@ -276,7 +272,6 @@ private fun SettingsContent(
                 Spacer(Modifier.height(12.dp))
                 Button(
                     onClick = {
-                        // TODO: Реализовать выбор изображения
                     },
                     colors = ButtonDefaults.buttonColors(
                         containerColor = mainLight

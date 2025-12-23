@@ -1,4 +1,4 @@
-package com.example.sgmautotreckerapp.data.sync
+﻿package com.example.sgmautotreckerapp.data.sync
 
 import com.example.sgmautotreckerapp.data.database.CarDatabase
 import com.example.sgmautotreckerapp.data.sync.FullDumpDto
@@ -67,7 +67,6 @@ class SyncRepository(
         val userCarDao = db.userCarDao()
         val expenseDao = db.expenseDao()
 
-        // Получаем данные из DAO
         val users = userDao.getAllUsers().map { it.toDto() }
 
         val cars = carDao.getAllCars().first().map { it.toDto() }
@@ -91,7 +90,6 @@ class SyncRepository(
         val dump = api.downloadDb()
 
         db.withTransaction {
-            // Очищаем все таблицы
             db.clearAllTables()
 
             val userDao = db.userDao()
@@ -99,7 +97,6 @@ class SyncRepository(
             val userCarDao = db.userCarDao()
             val expenseDao = db.expenseDao()
 
-            // Вставляем данные с сервера
             dump.users.map { it.toEntity() }.forEach { userDao.insert(it) }
             carDao.insertAll(dump.cars.map { it.toEntity() })
             dump.user_cars.map { it.toEntity() }.forEach { userCarDao.insert(it) }

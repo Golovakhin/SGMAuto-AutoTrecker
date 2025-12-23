@@ -1,4 +1,4 @@
-from fastapi import FastAPI
+﻿from fastapi import FastAPI
 from pydantic import BaseModel
 from typing import List, Optional, Dict
 from aiogram import Bot, Dispatcher, F
@@ -62,13 +62,13 @@ SERVER_EXPENSES: List[ExpenseModel] = []
 USER_SESSIONS: Dict[int, Dict] = {}
 
 EXPENSE_TYPES = [
-    "Топливо",
-    "Ремонт",
-    "Парковки и дороги",
-    "Штрафы и налоги",
-    "Мойка",
-    "Страховка",
-    "Прочее",
+    "РўРѕРїР»РёРІРѕ",
+    "Р РµРјРѕРЅС‚",
+    "РџР°СЂРєРѕРІРєРё Рё РґРѕСЂРѕРіРё",
+    "РЁС‚СЂР°С„С‹ Рё РЅР°Р»РѕРіРё",
+    "РњРѕР№РєР°",
+    "РЎС‚СЂР°С…РѕРІРєР°",
+    "РџСЂРѕС‡РµРµ",
 ]
 
 def expense_type_keyboard() -> ReplyKeyboardMarkup:
@@ -77,9 +77,9 @@ def expense_type_keyboard() -> ReplyKeyboardMarkup:
 
 def main_menu_keyboard() -> ReplyKeyboardMarkup:
     rows = [
-        [KeyboardButton(text="Добавить расход")],
-        [KeyboardButton(text="Посмотреть расходы")],
-        [KeyboardButton(text="Отчёт в Excel")],
+        [KeyboardButton(text="Р”РѕР±Р°РІРёС‚СЊ СЂР°СЃС…РѕРґ")],
+        [KeyboardButton(text="РџРѕСЃРјРѕС‚СЂРµС‚СЊ СЂР°СЃС…РѕРґС‹")],
+        [KeyboardButton(text="РћС‚С‡С‘С‚ РІ Excel")],
     ]
     return ReplyKeyboardMarkup(keyboard=rows, resize_keyboard=True)
 
@@ -87,8 +87,8 @@ def main_menu_keyboard() -> ReplyKeyboardMarkup:
 def confirm_keyboard() -> ReplyKeyboardMarkup:
     rows = [
         [
-            KeyboardButton(text="✅ Подтвердить запись"),
-            KeyboardButton(text="❌ Отменить"),
+            KeyboardButton(text="вњ… РџРѕРґС‚РІРµСЂРґРёС‚СЊ Р·Р°РїРёСЃСЊ"),
+            KeyboardButton(text="вќЊ РћС‚РјРµРЅРёС‚СЊ"),
         ]
     ]
     return ReplyKeyboardMarkup(keyboard=rows, resize_keyboard=True)
@@ -97,10 +97,10 @@ def confirm_keyboard() -> ReplyKeyboardMarkup:
 def date_choice_keyboard() -> ReplyKeyboardMarkup:
     rows = [
         [
-            KeyboardButton(text="Сегодня"),
-            KeyboardButton(text="Вчера"),
+            KeyboardButton(text="РЎРµРіРѕРґРЅСЏ"),
+            KeyboardButton(text="Р’С‡РµСЂР°"),
         ],
-        [KeyboardButton(text="Другая дата")],
+        [KeyboardButton(text="Р”СЂСѓРіР°СЏ РґР°С‚Р°")],
     ]
     return ReplyKeyboardMarkup(keyboard=rows, resize_keyboard=True)
 
@@ -160,10 +160,10 @@ dp = Dispatcher()
 async def cmd_start(message: Message):
     USER_SESSIONS.pop(message.chat.id, None)
     await message.answer(
-        "Бот запущен.\n"
-        "Выберите действие с помощью кнопок ниже.\n"
-        "Важно: в приложении в поле tgID должен быть ваш @username, "
-        "чтобы бот нашёл ваш профиль.",
+        "Р‘РѕС‚ Р·Р°РїСѓС‰РµРЅ.\n"
+        "Р’С‹Р±РµСЂРёС‚Рµ РґРµР№СЃС‚РІРёРµ СЃ РїРѕРјРѕС‰СЊСЋ РєРЅРѕРїРѕРє РЅРёР¶Рµ.\n"
+        "Р’Р°Р¶РЅРѕ: РІ РїСЂРёР»РѕР¶РµРЅРёРё РІ РїРѕР»Рµ tgID РґРѕР»Р¶РµРЅ Р±С‹С‚СЊ РІР°С€ @username, "
+        "С‡С‚РѕР±С‹ Р±РѕС‚ РЅР°С€С‘Р» РІР°С€ РїСЂРѕС„РёР»СЊ.",
         reply_markup=main_menu_keyboard(),
     )
 
@@ -180,16 +180,15 @@ def get_current_iso_datetime() -> str:
     return iso_from_utc(datetime.utcnow())
 
 
-BOT_TIME_OFFSET_HOURS = 3  # сдвиг относительно UTC для отображения пользователю (по умолчанию МСК)
+BOT_TIME_OFFSET_HOURS = 3
 
 def format_expense_datetime(dt_str: Optional[str]) -> str:
-    """Форматирует дату расхода в удобный вид с учётом местного времени: 23.12.2025 17:05."""
+    """Р¤РѕСЂРјР°С‚РёСЂСѓРµС‚ РґР°С‚Сѓ СЂР°СЃС…РѕРґР° РІ СѓРґРѕР±РЅС‹Р№ РІРёРґ СЃ СѓС‡С‘С‚РѕРј РјРµСЃС‚РЅРѕРіРѕ РІСЂРµРјРµРЅРё: 23.12.2025 17:05."""
     if not dt_str:
-        return "дата неизвестна"
+        return "РґР°С‚Р° РЅРµРёР·РІРµСЃС‚РЅР°"
     try:
         value = dt_str.replace("Z", "+00:00") if dt_str.endswith("Z") else dt_str
         dt = datetime.fromisoformat(value)
-        # dt хранится в UTC, сдвигаем к локальному времени пользователя
         dt_local = dt + timedelta(hours=BOT_TIME_OFFSET_HOURS)
         return dt_local.strftime("%d.%m.%Y %H:%M")
     except ValueError:
@@ -203,9 +202,8 @@ async def handle_text(message: Message):
 
     session = USER_SESSIONS.get(chat_id)
 
-    # Шаг подтверждения перед сохранением расхода
     if session and session.get("stage") == "confirm_expense":
-        if text == "✅ Подтвердить запись":
+        if text == "вњ… РџРѕРґС‚РІРµСЂРґРёС‚СЊ Р·Р°РїРёСЃСЊ":
             try:
                 tg_id_value = session["tg_id_value"]
                 user_id = session["user_id"]
@@ -217,7 +215,7 @@ async def handle_text(message: Message):
             except KeyError:
                 USER_SESSIONS.pop(chat_id, None)
                 await message.answer(
-                    "Произошла ошибка при подтверждении записи. Попробуйте ввести расход заново.",
+                    "РџСЂРѕРёР·РѕС€Р»Р° РѕС€РёР±РєР° РїСЂРё РїРѕРґС‚РІРµСЂР¶РґРµРЅРёРё Р·Р°РїРёСЃРё. РџРѕРїСЂРѕР±СѓР№С‚Рµ РІРІРµСЃС‚Рё СЂР°СЃС…РѕРґ Р·Р°РЅРѕРІРѕ.",
                     reply_markup=main_menu_keyboard(),
                 )
                 return
@@ -238,29 +236,28 @@ async def handle_text(message: Message):
 
             expense_time = format_expense_datetime(expense.date)
             await message.answer(
-                "Запись о расходе сохранена.\n\n"
-                f"Категория: {expense.expenseType}\n"
-                f"Сумма: {expense.amount:.2f} ₽\n"
-                f"Дата и время: {expense_time}\n"
-                f"Описание: {expense.description or 'Без описания'}\n\n"
-                "Этот расход появится в приложении после следующей синхронизации.",
+                "Р—Р°РїРёСЃСЊ Рѕ СЂР°СЃС…РѕРґРµ СЃРѕС…СЂР°РЅРµРЅР°.\n\n"
+                f"РљР°С‚РµРіРѕСЂРёСЏ: {expense.expenseType}\n"
+                f"РЎСѓРјРјР°: {expense.amount:.2f} в‚Ѕ\n"
+                f"Р”Р°С‚Р° Рё РІСЂРµРјСЏ: {expense_time}\n"
+                f"РћРїРёСЃР°РЅРёРµ: {expense.description or 'Р‘РµР· РѕРїРёСЃР°РЅРёСЏ'}\n\n"
+                "Р­С‚РѕС‚ СЂР°СЃС…РѕРґ РїРѕСЏРІРёС‚СЃСЏ РІ РїСЂРёР»РѕР¶РµРЅРёРё РїРѕСЃР»Рµ СЃР»РµРґСѓСЋС‰РµР№ СЃРёРЅС…СЂРѕРЅРёР·Р°С†РёРё.",
                 reply_markup=main_menu_keyboard(),
             )
 
             USER_SESSIONS.pop(chat_id, None)
             return
 
-        if text == "❌ Отменить":
+        if text == "вќЊ РћС‚РјРµРЅРёС‚СЊ":
             USER_SESSIONS.pop(chat_id, None)
             await message.answer(
-                "Ввод расхода отменён.\nВы можете начать заново, выбрав действие в главном меню.",
+                "Р’РІРѕРґ СЂР°СЃС…РѕРґР° РѕС‚РјРµРЅС‘РЅ.\nР’С‹ РјРѕР¶РµС‚Рµ РЅР°С‡Р°С‚СЊ Р·Р°РЅРѕРІРѕ, РІС‹Р±СЂР°РІ РґРµР№СЃС‚РІРёРµ РІ РіР»Р°РІРЅРѕРј РјРµРЅСЋ.",
                 reply_markup=main_menu_keyboard(),
             )
             return
 
-        # Если пользователь ввёл что-то другое, просим воспользоваться кнопками подтверждения
         await message.answer(
-            "Проверьте данные расхода и подтвердите или отмените запись с помощью кнопок ниже.",
+            "РџСЂРѕРІРµСЂСЊС‚Рµ РґР°РЅРЅС‹Рµ СЂР°СЃС…РѕРґР° Рё РїРѕРґС‚РІРµСЂРґРёС‚Рµ РёР»Рё РѕС‚РјРµРЅРёС‚Рµ Р·Р°РїРёСЃСЊ СЃ РїРѕРјРѕС‰СЊСЋ РєРЅРѕРїРѕРє РЅРёР¶Рµ.",
             reply_markup=confirm_keyboard(),
         )
         return
@@ -272,35 +269,33 @@ async def handle_text(message: Message):
             if amount <= 0:
                 raise ValueError()
         except ValueError:
-            await message.answer("Введите сумму числом, например: 1500.50")
+            await message.answer("Р’РІРµРґРёС‚Рµ СЃСѓРјРјСѓ С‡РёСЃР»РѕРј, РЅР°РїСЂРёРјРµСЂ: 1500.50")
             return
 
         session["amount"] = amount
         session["stage"] = "await_description"
-        await message.answer("Введите описание расхода (или '-' если без описания):")
+        await message.answer("Р’РІРµРґРёС‚Рµ РѕРїРёСЃР°РЅРёРµ СЂР°СЃС…РѕРґР° (РёР»Рё '-' РµСЃР»Рё Р±РµР· РѕРїРёСЃР°РЅРёСЏ):")
         return
 
-    # Выбор даты расхода (после ввода описания)
     if session and session.get("stage") == "choose_date":
-        if text == "Сегодня":
+        if text == "РЎРµРіРѕРґРЅСЏ":
             date_iso = get_current_iso_datetime()
-        elif text == "Вчера":
+        elif text == "Р’С‡РµСЂР°":
             date_iso = iso_from_utc(datetime.utcnow() - timedelta(days=1))
-        elif text == "Другая дата":
+        elif text == "Р”СЂСѓРіР°СЏ РґР°С‚Р°":
             session["stage"] = "await_custom_date"
             await message.answer(
-                "Введите дату расхода в формате ДД.ММ.ГГГГ или ДД.ММ.ГГГГ ЧЧ:ММ.\n"
-                "Например: 23.12.2025 или 23.12.2025 14:30.",
+                "Р’РІРµРґРёС‚Рµ РґР°С‚Сѓ СЂР°СЃС…РѕРґР° РІ С„РѕСЂРјР°С‚Рµ Р”Р”.РњРњ.Р“Р“Р“Р“ РёР»Рё Р”Р”.РњРњ.Р“Р“Р“Р“ Р§Р§:РњРњ.\n"
+                "РќР°РїСЂРёРјРµСЂ: 23.12.2025 РёР»Рё 23.12.2025 14:30.",
             )
             return
         else:
             await message.answer(
-                "Пожалуйста, выберите дату расхода с помощью кнопок или введите корректный вариант.",
+                "РџРѕР¶Р°Р»СѓР№СЃС‚Р°, РІС‹Р±РµСЂРёС‚Рµ РґР°С‚Сѓ СЂР°СЃС…РѕРґР° СЃ РїРѕРјРѕС‰СЊСЋ РєРЅРѕРїРѕРє РёР»Рё РІРІРµРґРёС‚Рµ РєРѕСЂСЂРµРєС‚РЅС‹Р№ РІР°СЂРёР°РЅС‚.",
                 reply_markup=date_choice_keyboard(),
             )
             return
 
-        # У нас есть date_iso, переходим к шагу подтверждения
         expense_time = format_expense_datetime(date_iso)
         session.update(
             {
@@ -310,18 +305,17 @@ async def handle_text(message: Message):
         )
 
         await message.answer(
-            "Проверьте данные расхода:\n\n"
-            f"Категория: {session['expense_type']}\n"
-            f"Сумма: {session['amount']:.2f} ₽\n"
-            f"Дата и время: {expense_time}\n"
-            f"Описание: {session.get('description') or 'Без описания'}\n\n"
-            "Если всё верно, нажмите \"✅ Подтвердить запись\".\n"
-            "Если допустили ошибку, нажмите \"❌ Отменить\" и введите данные заново.",
+            "РџСЂРѕРІРµСЂСЊС‚Рµ РґР°РЅРЅС‹Рµ СЂР°СЃС…РѕРґР°:\n\n"
+            f"РљР°С‚РµРіРѕСЂРёСЏ: {session['expense_type']}\n"
+            f"РЎСѓРјРјР°: {session['amount']:.2f} в‚Ѕ\n"
+            f"Р”Р°С‚Р° Рё РІСЂРµРјСЏ: {expense_time}\n"
+            f"РћРїРёСЃР°РЅРёРµ: {session.get('description') or 'Р‘РµР· РѕРїРёСЃР°РЅРёСЏ'}\n\n"
+            "Р•СЃР»Рё РІСЃС‘ РІРµСЂРЅРѕ, РЅР°Р¶РјРёС‚Рµ \"вњ… РџРѕРґС‚РІРµСЂРґРёС‚СЊ Р·Р°РїРёСЃСЊ\".\n"
+            "Р•СЃР»Рё РґРѕРїСѓСЃС‚РёР»Рё РѕС€РёР±РєСѓ, РЅР°Р¶РјРёС‚Рµ \"вќЊ РћС‚РјРµРЅРёС‚СЊ\" Рё РІРІРµРґРёС‚Рµ РґР°РЅРЅС‹Рµ Р·Р°РЅРѕРІРѕ.",
             reply_markup=confirm_keyboard(),
         )
         return
 
-    # Ввод произвольной даты
     if session and session.get("stage") == "await_custom_date":
         text_clean = text.strip()
         dt_local = None
@@ -334,12 +328,11 @@ async def handle_text(message: Message):
 
         if dt_local is None:
             await message.answer(
-                "Не удалось распознать дату. Введите дату в формате ДД.ММ.ГГГГ или ДД.ММ.ГГГГ ЧЧ:ММ.\n"
-                "Например: 23.12.2025 или 23.12.2025 14:30.",
+                "РќРµ СѓРґР°Р»РѕСЃСЊ СЂР°СЃРїРѕР·РЅР°С‚СЊ РґР°С‚Сѓ. Р’РІРµРґРёС‚Рµ РґР°С‚Сѓ РІ С„РѕСЂРјР°С‚Рµ Р”Р”.РњРњ.Р“Р“Р“Р“ РёР»Рё Р”Р”.РњРњ.Р“Р“Р“Р“ Р§Р§:РњРњ.\n"
+                "РќР°РїСЂРёРјРµСЂ: 23.12.2025 РёР»Рё 23.12.2025 14:30.",
             )
             return
 
-        # Переводим локальное время пользователя в UTC
         dt_utc = dt_local - timedelta(hours=BOT_TIME_OFFSET_HOURS)
         date_iso = iso_from_utc(dt_utc)
 
@@ -352,13 +345,13 @@ async def handle_text(message: Message):
         )
 
         await message.answer(
-            "Проверьте данные расхода:\n\n"
-            f"Категория: {session['expense_type']}\n"
-            f"Сумма: {session['amount']:.2f} ₽\n"
-            f"Дата и время: {expense_time}\n"
-            f"Описание: {session.get('description') or 'Без описания'}\n\n"
-            "Если всё верно, нажмите \"✅ Подтвердить запись\".\n"
-            "Если допустили ошибку, нажмите \"❌ Отменить\" и введите данные заново.",
+            "РџСЂРѕРІРµСЂСЊС‚Рµ РґР°РЅРЅС‹Рµ СЂР°СЃС…РѕРґР°:\n\n"
+            f"РљР°С‚РµРіРѕСЂРёСЏ: {session['expense_type']}\n"
+            f"РЎСѓРјРјР°: {session['amount']:.2f} в‚Ѕ\n"
+            f"Р”Р°С‚Р° Рё РІСЂРµРјСЏ: {expense_time}\n"
+            f"РћРїРёСЃР°РЅРёРµ: {session.get('description') or 'Р‘РµР· РѕРїРёСЃР°РЅРёСЏ'}\n\n"
+            "Р•СЃР»Рё РІСЃС‘ РІРµСЂРЅРѕ, РЅР°Р¶РјРёС‚Рµ \"вњ… РџРѕРґС‚РІРµСЂРґРёС‚СЊ Р·Р°РїРёСЃСЊ\".\n"
+            "Р•СЃР»Рё РґРѕРїСѓСЃС‚РёР»Рё РѕС€РёР±РєСѓ, РЅР°Р¶РјРёС‚Рµ \"вќЊ РћС‚РјРµРЅРёС‚СЊ\" Рё РІРІРµРґРёС‚Рµ РґР°РЅРЅС‹Рµ Р·Р°РЅРѕРІРѕ.",
             reply_markup=confirm_keyboard(),
         )
         return
@@ -369,8 +362,8 @@ async def handle_text(message: Message):
         tg_username = message.from_user.username
         if not tg_username:
             await message.answer(
-                "У вас нет username в Telegram. "
-                "Задайте его в настройках Telegram и укажите такой же @username в приложении в поле tgID."
+                "РЈ РІР°СЃ РЅРµС‚ username РІ Telegram. "
+                "Р—Р°РґР°Р№С‚Рµ РµРіРѕ РІ РЅР°СЃС‚СЂРѕР№РєР°С… Telegram Рё СѓРєР°Р¶РёС‚Рµ С‚Р°РєРѕР№ Р¶Рµ @username РІ РїСЂРёР»РѕР¶РµРЅРёРё РІ РїРѕР»Рµ tgID."
             )
             USER_SESSIONS.pop(chat_id, None)
             return
@@ -381,9 +374,9 @@ async def handle_text(message: Message):
         user = next((u for u in SERVER_USERS if u.tgID == tg_id_value), None)
         if not user:
             await message.answer(
-                "Пользователь с таким tgID не найден на сервере.\n"
-                "Убедитесь, что в приложении в профиле указан ваш tgID: "
-                f"{tg_id_value}, и выполнена синхронизация."
+                "РџРѕР»СЊР·РѕРІР°С‚РµР»СЊ СЃ С‚Р°РєРёРј tgID РЅРµ РЅР°Р№РґРµРЅ РЅР° СЃРµСЂРІРµСЂРµ.\n"
+                "РЈР±РµРґРёС‚РµСЃСЊ, С‡С‚Рѕ РІ РїСЂРёР»РѕР¶РµРЅРёРё РІ РїСЂРѕС„РёР»Рµ СѓРєР°Р·Р°РЅ РІР°С€ tgID: "
+                f"{tg_id_value}, Рё РІС‹РїРѕР»РЅРµРЅР° СЃРёРЅС…СЂРѕРЅРёР·Р°С†РёСЏ."
             )
             USER_SESSIONS.pop(chat_id, None)
             return
@@ -392,15 +385,14 @@ async def handle_text(message: Message):
         user_cars = [uc for uc in SERVER_USER_CARS if uc.userId == user.id]
         if not user_cars:
             await message.answer(
-                "У вас нет автомобилей на сервере.\n"
-                "Сначала добавьте автомобиль в приложении и синхронизируйте данные."
+                "РЈ РІР°СЃ РЅРµС‚ Р°РІС‚РѕРјРѕР±РёР»РµР№ РЅР° СЃРµСЂРІРµСЂРµ.\n"
+                "РЎРЅР°С‡Р°Р»Р° РґРѕР±Р°РІСЊС‚Рµ Р°РІС‚РѕРјРѕР±РёР»СЊ РІ РїСЂРёР»РѕР¶РµРЅРёРё Рё СЃРёРЅС…СЂРѕРЅРёР·РёСЂСѓР№С‚Рµ РґР°РЅРЅС‹Рµ."
             )
             USER_SESSIONS.pop(chat_id, None)
             return
 
         user_car = user_cars[0]
 
-        # Переходим к выбору даты расхода
         session.update(
             {
                 "stage": "choose_date",
@@ -412,26 +404,25 @@ async def handle_text(message: Message):
         )
 
         await message.answer(
-            "Выберите дату расхода:",
+            "Р’С‹Р±РµСЂРёС‚Рµ РґР°С‚Сѓ СЂР°СЃС…РѕРґР°:",
             reply_markup=date_choice_keyboard(),
         )
         return
 
-    # Главное меню
-    if text == "Добавить расход":
+    if text == "Р”РѕР±Р°РІРёС‚СЊ СЂР°СЃС…РѕРґ":
         USER_SESSIONS.pop(chat_id, None)
         await message.answer(
-            "Выберите категорию расхода с помощью кнопок ниже.",
+            "Р’С‹Р±РµСЂРёС‚Рµ РєР°С‚РµРіРѕСЂРёСЋ СЂР°СЃС…РѕРґР° СЃ РїРѕРјРѕС‰СЊСЋ РєРЅРѕРїРѕРє РЅРёР¶Рµ.",
             reply_markup=expense_type_keyboard(),
         )
         return
 
-    if text == "Посмотреть расходы":
+    if text == "РџРѕСЃРјРѕС‚СЂРµС‚СЊ СЂР°СЃС…РѕРґС‹":
         tg_username = message.from_user.username
         if not tg_username:
             await message.answer(
-                "У вас нет username в Telegram. "
-                "Задайте его в настройках Telegram и укажите такой же @username в приложении в поле tgID."
+                "РЈ РІР°СЃ РЅРµС‚ username РІ Telegram. "
+                "Р—Р°РґР°Р№С‚Рµ РµРіРѕ РІ РЅР°СЃС‚СЂРѕР№РєР°С… Telegram Рё СѓРєР°Р¶РёС‚Рµ С‚Р°РєРѕР№ Р¶Рµ @username РІ РїСЂРёР»РѕР¶РµРЅРёРё РІ РїРѕР»Рµ tgID."
             )
             return
 
@@ -439,22 +430,21 @@ async def handle_text(message: Message):
         user = next((u for u in SERVER_USERS if u.tgID == tg_id_value), None)
         if not user:
             await message.answer(
-                "Пользователь с таким tgID не найден на сервере.\n"
-                "Убедитесь, что в приложении в профиле указан ваш tgID: "
-                f"{tg_id_value}, и выполнена синхронизация."
+                "РџРѕР»СЊР·РѕРІР°С‚РµР»СЊ СЃ С‚Р°РєРёРј tgID РЅРµ РЅР°Р№РґРµРЅ РЅР° СЃРµСЂРІРµСЂРµ.\n"
+                "РЈР±РµРґРёС‚РµСЃСЊ, С‡С‚Рѕ РІ РїСЂРёР»РѕР¶РµРЅРёРё РІ РїСЂРѕС„РёР»Рµ СѓРєР°Р·Р°РЅ РІР°С€ tgID: "
+                f"{tg_id_value}, Рё РІС‹РїРѕР»РЅРµРЅР° СЃРёРЅС…СЂРѕРЅРёР·Р°С†РёСЏ."
             )
             return
 
         user_expenses = [e for e in SERVER_EXPENSES if e.userId == user.id]
         if not user_expenses:
             await message.answer(
-                "У вас ещё нет расходов.\n"
-                "Добавьте первый расход через кнопку \"Добавить расход\".",
+                "РЈ РІР°СЃ РµС‰С‘ РЅРµС‚ СЂР°СЃС…РѕРґРѕРІ.\n"
+                "Р”РѕР±Р°РІСЊС‚Рµ РїРµСЂРІС‹Р№ СЂР°СЃС…РѕРґ С‡РµСЂРµР· РєРЅРѕРїРєСѓ \"Р”РѕР±Р°РІРёС‚СЊ СЂР°СЃС…РѕРґ\".",
                 reply_markup=main_menu_keyboard(),
             )
             return
 
-        # Показываем последние 10 расходов пользователя
         user_expenses_sorted = sorted(user_expenses, key=lambda e: e.date or "")
         last_expenses = user_expenses_sorted[-10:]
 
@@ -462,21 +452,21 @@ async def handle_text(message: Message):
         for e in last_expenses:
             date_str = format_expense_datetime(e.date)
             desc = f" ({e.description})" if e.description else ""
-            lines.append(f"• {date_str} — {e.expenseType}: {e.amount:.2f} ₽{desc}")
+            lines.append(f"вЂў {date_str} вЂ” {e.expenseType}: {e.amount:.2f} в‚Ѕ{desc}")
 
         text_response = (
-            "Ваши последние расходы:\n\n" + "\n".join(lines) +
-            f"\n\nПоказано записей: {len(last_expenses)}"
+            "Р’Р°С€Рё РїРѕСЃР»РµРґРЅРёРµ СЂР°СЃС…РѕРґС‹:\n\n" + "\n".join(lines) +
+            f"\n\nРџРѕРєР°Р·Р°РЅРѕ Р·Р°РїРёСЃРµР№: {len(last_expenses)}"
         )
         await message.answer(text_response, reply_markup=main_menu_keyboard())
         return
 
-    if text == "Отчёт в Excel":
+    if text == "РћС‚С‡С‘С‚ РІ Excel":
         tg_username = message.from_user.username
         if not tg_username:
             await message.answer(
-                "У вас нет username в Telegram. "
-                "Задайте его в настройках Telegram и укажите такой же @username в приложении в поле tgID."
+                "РЈ РІР°СЃ РЅРµС‚ username РІ Telegram. "
+                "Р—Р°РґР°Р№С‚Рµ РµРіРѕ РІ РЅР°СЃС‚СЂРѕР№РєР°С… Telegram Рё СѓРєР°Р¶РёС‚Рµ С‚Р°РєРѕР№ Р¶Рµ @username РІ РїСЂРёР»РѕР¶РµРЅРёРё РІ РїРѕР»Рµ tgID."
             )
             return
 
@@ -484,27 +474,26 @@ async def handle_text(message: Message):
         user = next((u for u in SERVER_USERS if u.tgID == tg_id_value), None)
         if not user:
             await message.answer(
-                "Пользователь с таким tgID не найден на сервере.\n"
-                "Убедитесь, что в приложении в профиле указан ваш tgID: "
-                f"{tg_id_value}, и выполнена синхронизация."
+                "РџРѕР»СЊР·РѕРІР°С‚РµР»СЊ СЃ С‚Р°РєРёРј tgID РЅРµ РЅР°Р№РґРµРЅ РЅР° СЃРµСЂРІРµСЂРµ.\n"
+                "РЈР±РµРґРёС‚РµСЃСЊ, С‡С‚Рѕ РІ РїСЂРёР»РѕР¶РµРЅРёРё РІ РїСЂРѕС„РёР»Рµ СѓРєР°Р·Р°РЅ РІР°С€ tgID: "
+                f"{tg_id_value}, Рё РІС‹РїРѕР»РЅРµРЅР° СЃРёРЅС…СЂРѕРЅРёР·Р°С†РёСЏ."
             )
             return
 
         user_expenses = [e for e in SERVER_EXPENSES if e.userId == user.id]
         if not user_expenses:
             await message.answer(
-                "У вас ещё нет расходов.\n"
-                "Добавьте первый расход через кнопку \"Добавить расход\".",
+                "РЈ РІР°СЃ РµС‰С‘ РЅРµС‚ СЂР°СЃС…РѕРґРѕРІ.\n"
+                "Р”РѕР±Р°РІСЊС‚Рµ РїРµСЂРІС‹Р№ СЂР°СЃС…РѕРґ С‡РµСЂРµР· РєРЅРѕРїРєСѓ \"Р”РѕР±Р°РІРёС‚СЊ СЂР°СЃС…РѕРґ\".",
                 reply_markup=main_menu_keyboard(),
             )
             return
 
-        # Формируем полный отчёт по всем расходам пользователя
         user_expenses_sorted = sorted(user_expenses, key=lambda e: e.date or "")
 
         output = io.StringIO()
         writer = csv.writer(output, delimiter=';')
-        writer.writerow(["Дата и время", "Категория", "Сумма, ₽", "Описание"])
+        writer.writerow(["Р”Р°С‚Р° Рё РІСЂРµРјСЏ", "РљР°С‚РµРіРѕСЂРёСЏ", "РЎСѓРјРјР°, в‚Ѕ", "РћРїРёСЃР°РЅРёРµ"])
 
         for e in user_expenses_sorted:
             date_str = format_expense_datetime(e.date)
@@ -515,12 +504,12 @@ async def handle_text(message: Message):
                 e.description or "",
             ])
 
-        data = output.getvalue().encode("utf-8-sig")  # BOM, чтобы Excel корректно открыл русский текст
+        data = output.getvalue().encode("utf-8-sig")
         file = BufferedInputFile(data, "expenses_report.csv")
 
         await message.answer_document(
             document=file,
-            caption="Отчёт по всем вашим расходам (CSV-файл для Excel).",
+            caption="РћС‚С‡С‘С‚ РїРѕ РІСЃРµРј РІР°С€РёРј СЂР°СЃС…РѕРґР°Рј (CSV-С„Р°Р№Р» РґР»СЏ Excel).",
             reply_markup=main_menu_keyboard(),
         )
         return
@@ -530,11 +519,11 @@ async def handle_text(message: Message):
             "stage": "await_amount",
             "expense_type": text,
         }
-        await message.answer(f"Вы выбрали категорию: {text}.\nВведите сумму расхода в рублях:")
+        await message.answer(f"Р’С‹ РІС‹Р±СЂР°Р»Рё РєР°С‚РµРіРѕСЂРёСЋ: {text}.\nР’РІРµРґРёС‚Рµ СЃСѓРјРјСѓ СЂР°СЃС…РѕРґР° РІ СЂСѓР±Р»СЏС…:")
         return
 
     await message.answer(
-        "Чтобы начать, используйте кнопки главного меню ниже.",
+        "Р§С‚РѕР±С‹ РЅР°С‡Р°С‚СЊ, РёСЃРїРѕР»СЊР·СѓР№С‚Рµ РєРЅРѕРїРєРё РіР»Р°РІРЅРѕРіРѕ РјРµРЅСЋ РЅРёР¶Рµ.",
         reply_markup=main_menu_keyboard(),
     )
 

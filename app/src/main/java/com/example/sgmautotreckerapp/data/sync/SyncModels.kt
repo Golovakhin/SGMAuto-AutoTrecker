@@ -1,4 +1,4 @@
-package com.example.sgmautotreckerapp.data.sync
+﻿package com.example.sgmautotreckerapp.data.sync
 
 import com.example.sgmautotreckerapp.data.entity.Car
 import com.example.sgmautotreckerapp.data.entity.Expense

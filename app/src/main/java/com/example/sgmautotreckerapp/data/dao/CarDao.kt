@@ -1,4 +1,4 @@
-package com.example.sgmautotreckerapp.data.dao
+﻿package com.example.sgmautotreckerapp.data.dao
 
 import androidx.room.Dao
 import androidx.room.Insert

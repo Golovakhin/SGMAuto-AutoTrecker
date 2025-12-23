@@ -1,4 +1,4 @@
-package com.example.sgmautotreckerapp.commonfunction
+﻿package com.example.sgmautotreckerapp.commonfunction
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Row

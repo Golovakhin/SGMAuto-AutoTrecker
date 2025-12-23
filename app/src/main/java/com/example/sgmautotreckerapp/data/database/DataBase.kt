@@ -1,4 +1,4 @@
-package com.example.sgmautotreckerapp.data.database
+﻿package com.example.sgmautotreckerapp.data.database
 
 import android.content.Context
 import androidx.room.Database
@@ -39,9 +39,7 @@ abstract class CarDatabase: RoomDatabase(){
                 ).addCallback(object : Callback() {
                     override fun onCreate(db: SupportSQLiteDatabase) {
                         super.onCreate(db)
-                        // Вставляем данные при создании базы
                         CoroutineScope(Dispatchers.IO).launch {
-                            // Небольшая задержка для завершения создания базы
                             kotlinx.coroutines.delay(100)
                             INSTANCE?.let { database ->
                                 insertInitialData(database)
@@ -52,7 +50,6 @@ abstract class CarDatabase: RoomDatabase(){
                     .fallbackToDestructiveMigration()
                     .build()
                     INSTANCE = instance
-                    // Вставляем данные при первом получении базы (если их еще нет)
                     CoroutineScope(Dispatchers.IO).launch {
                         insertInitialData(instance)
                     }
@@ -62,13 +59,11 @@ abstract class CarDatabase: RoomDatabase(){
 
         private suspend fun insertInitialData(database: CarDatabase) {
             val carDao = database.carDao()
-            // Проверяем, есть ли уже данные в базе
             val count = carDao.getCarsCount()
             if (count == 0) {
                 insertInitialCars(carDao)
             }
             val userDao = database.userDao()
-            // Проверяем, есть ли уже пользователи
             if (userDao.getUserByEmail("test@example.com") == null) {
                 insertInitialUser(userDao)
             }
@@ -290,7 +285,7 @@ abstract class CarDatabase: RoomDatabase(){
         private suspend fun insertInitialUser(userDao: UserDao){
             val testUser = User(
                 email = "test@example.com",
-                password = "password123", // В реальном приложении хэшируйте пароль!
+                password = "password123",
                 userName = "Тест",
                 phone = "+79991234567",
                 tgID = "@teftelh"

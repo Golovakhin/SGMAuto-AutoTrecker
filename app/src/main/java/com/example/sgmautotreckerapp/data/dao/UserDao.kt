@@ -1,4 +1,4 @@
-package com.example.sgmautotreckerapp.data.dao
+﻿package com.example.sgmautotreckerapp.data.dao
 
 import androidx.room.Dao
 import androidx.room.Insert
@@ -10,31 +10,24 @@ import com.example.sgmautotreckerapp.data.entity.User
 @Dao
 interface UserDao {
 
-    //Регистрация
     @Insert(onConflict = OnConflictStrategy.ABORT)
     suspend fun insert(user: User): Long
 
-    //Авторизация
     @Query("SELECT * FROM users WHERE email = :email")
     suspend fun getUserByEmail(email: String): User?
 
-    //Проверка email
     @Query("SELECT COUNT(*) FROM users WHERE email = :email")
     suspend fun isEmailExists(email: String): Int
 
-    //Получение пользователя
     @Query("SELECT * FROM users WHERE id = :userId")
     suspend fun getUserById(userId: Int): User?
 
-    //Обновление имени пользователя
     @Query("UPDATE users SET userName = :userName WHERE id = :userId")
     suspend fun updateUserName(userId: Int, userName: String)
 
-    //Обновление пользователя
     @Query("UPDATE users SET userName = :userName, phone = :phone, tgID = :tgId WHERE id = :userId")
     suspend fun updateUser(userId: Int, userName: String, phone: String, tgId: String)
 
-    // Получить всех пользователей (для синхронизации)
     @Query("SELECT * FROM users")
     suspend fun getAllUsers(): List<User>
 }

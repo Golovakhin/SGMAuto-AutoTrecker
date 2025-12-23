@@ -1,4 +1,4 @@
-package com.example.sgmautotreckerapp.screens.CategoryScreens
+﻿package com.example.sgmautotreckerapp.screens.CategoryScreens
 
 import android.app.DatePickerDialog
 import android.net.Uri
@@ -87,7 +87,6 @@ private fun FuelText(navController: NavController?) {
             )
         }
 
-        //Spacer(Modifier.width(10.dp))
 
         Column(Modifier.fillMaxWidth(0.9f).fillMaxHeight()) {
             Box(Modifier.align(Alignment.CenterHorizontally)){
@@ -124,7 +123,6 @@ private fun FuelForms(
             
             val fuelTypes = listOf("АИ-92", "АИ-95", "АИ-98", "Дизель", "Газ")
             
-            // Расчет цены за литр
             val fuelPerLitr = remember(sumFuel.value, amountFuel.value) {
                 try {
                     val sum = sumFuel.value.toDoubleOrNull() ?: 0.0
@@ -159,7 +157,6 @@ private fun FuelForms(
                 )
             }
 
-            //Дата траты
             Row(Modifier.padding(top = 10.dp)) {
                 Text(
                     text = "Выберите дату",
@@ -205,7 +202,6 @@ private fun FuelForms(
             }
 
 
-            //Сумма траты
             Row(Modifier.padding(top = 20.dp)) {
                 Text(
                     text = "Сумма траты",
@@ -241,7 +237,6 @@ private fun FuelForms(
                 )
             }
 
-//тип бензина
             Row(Modifier.padding(top = 20.dp)) {
                 Text(
                     text = "Укажите тип бензина",
@@ -306,7 +301,6 @@ private fun FuelForms(
                     }
                 }
             }
-            //кол-во бензина
             val fieldShape = RoundedCornerShape(10.dp)
 
             Row(Modifier.padding(top = 20.dp)) {
@@ -361,7 +355,6 @@ private fun FuelForms(
             }
 
 
-            //Пробег
             Row(Modifier.padding(top = 20.dp)) {
                 Text(text = "Укажите пробег", fontSize = 20.sp, color = fontLight, fontWeight = FontWeight.SemiBold)
             }
@@ -378,7 +371,6 @@ private fun FuelForms(
 
                 )
             }
-            //загрузка чека
             Spacer(Modifier.fillMaxWidth().height(30.dp))
             Column(Modifier ,verticalArrangement = Arrangement.Center, horizontalAlignment = Alignment.CenterHorizontally) {
                 Row (

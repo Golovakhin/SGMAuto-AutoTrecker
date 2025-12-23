@@ -1,4 +1,4 @@
-package com.example.sgmautotreckerapp.navigation
+﻿package com.example.sgmautotreckerapp.navigation
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box

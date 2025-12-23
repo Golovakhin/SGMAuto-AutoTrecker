@@ -1,4 +1,4 @@
-package com.example.sgmautotreckerapp.screens
+﻿package com.example.sgmautotreckerapp.screens
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
@@ -165,7 +165,6 @@ public fun GarageCar(
                 .background(fontLight)
         ) {
             Column(Modifier.fillMaxSize()) {
-                // Верхняя часть: название машины по центру и кнопка удаления
                 Box(
                     Modifier
                         .fillMaxWidth()
@@ -185,7 +184,6 @@ public fun GarageCar(
                             Text(text = model, fontSize = 26.sp, color = backgroundLight)
                         }
                     }
-                    // Кнопка удаления в правом верхнем углу
                     if (userCarId != null && onDelete != null) {
                         Button(
                             onClick = onDelete,
@@ -209,13 +207,11 @@ public fun GarageCar(
                     }
                 }
 
-                // Нижняя часть: характеристики слева, картинка в правом нижнем углу
                 Box(
                     Modifier
                         .fillMaxSize()
                         .padding(bottom = 10.dp, end = 10.dp)
                 ) {
-                    // Характеристики слева
                     Column(
                         Modifier
                             .align(Alignment.CenterStart)
@@ -242,7 +238,6 @@ public fun GarageCar(
                         )
                     }
 
-                    // Иконка машины в правом нижнем углу
                     Box(
                         Modifier
                             .align(Alignment.BottomEnd)

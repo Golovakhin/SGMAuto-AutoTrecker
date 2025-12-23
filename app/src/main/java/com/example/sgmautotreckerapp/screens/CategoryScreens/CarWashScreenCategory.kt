@@ -1,4 +1,4 @@
-package com.example.sgmautotreckerapp.screens.CategoryScreens
+﻿package com.example.sgmautotreckerapp.screens.CategoryScreens
 
 import android.app.DatePickerDialog
 import androidx.compose.foundation.Image
@@ -120,7 +120,6 @@ private fun ContentCarWash(
                 )
             }
 
-            //Дата траты
             Row(Modifier.padding(top = 10.dp)) {
                 Text(
                     text = "Выберите дату",
@@ -167,7 +166,6 @@ private fun ContentCarWash(
             }
 
 
-            //Сумма траты
             Row(Modifier.padding(top = 20.dp)) {
                 Text(
                     text = "Сумма траты",
