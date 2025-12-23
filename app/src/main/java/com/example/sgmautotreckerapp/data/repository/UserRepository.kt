@@ -17,6 +17,8 @@ class UserRepository @Inject constructor(
 
     suspend fun updateUserName(userId: Int, userName: String) = userDao.updateUserName(userId, userName)
 
+    suspend fun updateUserPassword(userId: Int, newPassword: String) = userDao.updateUserPassword(userId, newPassword)
+
     suspend fun updateUser(userId: Int, userName: String, phone: String, tgId: String) = 
         userDao.updateUser(userId, userName, phone, tgId)
 }

@@ -16,6 +16,7 @@ import com.example.sgmautotreckerapp.screens.MainScreen
 import com.example.sgmautotreckerapp.screens.Profile
 import com.example.sgmautotreckerapp.screens.RegistrationScreen
 import com.example.sgmautotreckerapp.screens.SettingsScreen
+import com.example.sgmautotreckerapp.screens.SafetyScreen
 import com.example.sgmautotreckerapp.screens.CategoryScreens.CarWashScreen
 import com.example.sgmautotreckerapp.screens.CategoryScreens.FinesTaxesScreen
 import com.example.sgmautotreckerapp.screens.CategoryScreens.FuelScreen
@@ -42,6 +43,7 @@ object AppRoutes {
     const val CATEGORY_INSURANCE = "category_insurance/{userId}"
     const val CATEGORY_OTHERS = "category_others/{userId}"
     const val SETTINGS = "settings/{userId}"
+    const val SAFETY = "safety/{userId}"
     
     fun mainRoute(userId: Int) = "main/$userId"
     fun analysisRoute(userId: Int) = "analysis/$userId"
@@ -61,8 +63,7 @@ object AppRoutes {
 @Composable
 fun AppNavigation(
     navController: NavHostController = rememberNavController(),
-    startDestination: String = AppRoutes.LOGIN,
-    onThemeChange: ((Boolean) -> Unit)? = null
+    startDestination: String = AppRoutes.LOGIN
 ) {
     NavHost(
         navController = navController,
@@ -200,8 +201,18 @@ fun AppNavigation(
             val userId = backStackEntry.arguments?.getInt("userId") ?: return@composable
             SettingsScreen(
                 userId = userId,
-                navController = navController,
-                onThemeChange = onThemeChange
+                navController = navController
+            )
+        }
+
+        composable(
+            route = AppRoutes.SAFETY,
+            arguments = listOf(navArgument("userId") { type = NavType.IntType })
+        ) { backStackEntry ->
+            val userId = backStackEntry.arguments?.getInt("userId") ?: return@composable
+            SafetyScreen(
+                userId = userId,
+                navController = navController
             )
         }
     }

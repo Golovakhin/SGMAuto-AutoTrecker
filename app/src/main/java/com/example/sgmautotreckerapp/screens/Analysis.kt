@@ -181,7 +181,8 @@ fun AnalysisRing(
     strokeWidth: androidx.compose.ui.unit.Dp = 15.dp,
     topPadding: androidx.compose.ui.unit.Dp = 10.dp,
     valueFontSize: androidx.compose.ui.unit.TextUnit = 32.sp,
-    currencyFontSize: androidx.compose.ui.unit.TextUnit = 24.sp
+    currencyFontSize: androidx.compose.ui.unit.TextUnit = 24.sp,
+    textColor: Color = fontLight
 ) {
     val colors = listOf(
         circleColor.firstColor,
@@ -215,18 +216,18 @@ fun AnalysisRing(
             }
         }
         if (totals.isEmpty()) {
-            Text(text = "Расходов пока нет", color = fontLight)
+            Text(text = "Расходов пока нет", color = textColor)
         } else {
             Column(horizontalAlignment = Alignment.CenterHorizontally) {
                 Text(
                     text = displayAmount.toLong().toString(),
-                    color = fontLight,
+                    color = textColor,
                     fontSize = valueFontSize,
                     fontWeight = FontWeight.Bold
                 )
                 Text(
                     text = "₽",
-                    color = fontLight,
+                    color = textColor,
                     fontSize = currencyFontSize
                 )
             }

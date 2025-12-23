@@ -114,6 +114,19 @@ class AuthViewModel @Inject constructor(
         }
     }
 
+    fun updateUserPassword(userId: Int, newPassword: String, onResult: (Boolean, String?) -> Unit) {
+        viewModelScope.launch {
+            try {
+                userRepository.updateUserPassword(userId, newPassword)
+                val user = userRepository.getUserById(userId)
+                _currentUser.value = user
+                onResult(true, null)
+            } catch (e: Exception) {
+                onResult(false, e.message)
+            }
+        }
+    }
+
     sealed class RegistrationState {
         object Idle : RegistrationState()
         object Loading : RegistrationState()

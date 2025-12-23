@@ -152,32 +152,37 @@ private fun Analitika(
                     userId?.let { navController?.navigate(AppRoutes.analysisRoute(it)) }
                 }
         ) {
-            Row(
-                modifier = Modifier
-                    .fillMaxSize()
-                    .padding(horizontal = 24.dp, vertical = 16.dp),
-                horizontalArrangement = Arrangement.SpaceBetween,
-                verticalAlignment = Alignment.CenterVertically
-            ) {
-                Column(
-                    modifier = Modifier.weight(1f),
-                    verticalArrangement = Arrangement.spacedBy(12.dp)
+            if (totals.isEmpty()) {
+                Box(
+                    modifier = Modifier.fillMaxSize(),
+                    contentAlignment = Alignment.Center
                 ) {
-                    val entries = totals.entries.toList()
-                    val colors = listOf(
-                        circleColor.firstColor,
-                        circleColor.secondColor,
-                        circleColor.thirdColor,
-                        circleColor.fourthColor
+                    Text(
+                        text = "Расходов пока нет",
+                        color = backgroundAdvanceLight,
+                        fontSize = 16.sp
                     )
-
-                    if (entries.isEmpty()) {
-                        Text(
-                            text = "Расходов пока нет",
-                            color = fontLight,
-                            fontSize = 16.sp
+                }
+            } else {
+                Row(
+                    modifier = Modifier
+                        .fillMaxSize()
+                        .padding(horizontal = 24.dp, vertical = 16.dp),
+                    horizontalArrangement = Arrangement.SpaceBetween,
+                    verticalAlignment = Alignment.CenterVertically
+                ) {
+                    Column(
+                        modifier = Modifier.weight(1f),
+                        verticalArrangement = Arrangement.spacedBy(12.dp)
+                    ) {
+                        val entries = totals.entries.toList()
+                        val colors = listOf(
+                            circleColor.firstColor,
+                            circleColor.secondColor,
+                            circleColor.thirdColor,
+                            circleColor.fourthColor
                         )
-                    } else {
+
                         entries.forEachIndexed { index, entry ->
                             Row(verticalAlignment = Alignment.CenterVertically) {
                                 Canvas(
@@ -193,31 +198,32 @@ private fun Analitika(
                                 }
                                 Text(
                                     text = entry.key,
-                                    color = fontLight,
+                                    color = backgroundAdvanceLight,
                                     fontSize = 20.sp
                                 )
                             }
                         }
                     }
-                }
 
-                Column(
-                    modifier = Modifier
-                        .weight(1f)
-                        .fillMaxHeight(),
-                    horizontalAlignment = Alignment.End,
-                    verticalArrangement = Arrangement.Center
-                ) {
-                    AnalysisRing(
-                        totals = totals,
-                        totalAmount = totalAmount,
-                        modifier = Modifier.align(Alignment.End),
-                        ringSize = 110.dp,
-                        strokeWidth = 10.dp,
-                        topPadding = 0.dp,
-                        valueFontSize = 14.sp,
-                        currencyFontSize = 10.sp
-                    )
+                    Column(
+                        modifier = Modifier
+                            .weight(1f)
+                            .fillMaxHeight(),
+                        horizontalAlignment = Alignment.End,
+                        verticalArrangement = Arrangement.Center
+                    ) {
+                        AnalysisRing(
+                            totals = totals,
+                            totalAmount = totalAmount,
+                            modifier = Modifier.align(Alignment.End),
+                            ringSize = 110.dp,
+                            strokeWidth = 10.dp,
+                            topPadding = 0.dp,
+                            valueFontSize = 14.sp,
+                            currencyFontSize = 10.sp,
+                            textColor = backgroundAdvanceLight
+                        )
+                    }
                 }
             }
         }
@@ -227,27 +233,7 @@ private fun Analitika(
 
 
 @Composable
-private fun AnotherBlocks(){
-
-    Spacer(Modifier.fillMaxWidth().fillMaxHeight(0.08f))
-
-    Row(Modifier.fillMaxWidth().fillMaxHeight(0.4f).background(backgroundLight), horizontalArrangement = Arrangement.Center) {
-        Box(Modifier.fillMaxWidth(0.8f).fillMaxHeight() ) {
-            Row() {
-                Box(Modifier.fillMaxWidth(0.45f).fillMaxHeight().background(advanceLight, shape = RoundedCornerShape(25.dp))) {
-
-                }
-
-                Box(Modifier.fillMaxWidth(0.2f).fillMaxHeight().background(backgroundLight)) {
-
-                }
-
-                Box(Modifier.fillMaxWidth().fillMaxHeight().background(fontLight, shape = RoundedCornerShape(25.dp))) {
-
-                }
-            }
-        }
-    }
+private fun AnotherBlocks() {
 }
 
 
